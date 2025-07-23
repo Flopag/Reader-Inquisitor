@@ -1,0 +1,8 @@
+services:
+  backend:
+    image: reader-inquisitor/backend
+    build:
+      context: ../..
+      dockerfile: infra/docker/backend.Dockerfile
+    ports:
+      - 3000:3000
