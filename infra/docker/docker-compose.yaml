@@ -6,6 +6,7 @@ services:
       dockerfile: infra/docker/backend.Dockerfile
     ports:
       - 3000:3000
+    command: sh -c "npm run test && npm run start"
   frontend:
     image: reader-inquisitor/frontend
     build:
@@ -13,6 +14,7 @@ services:
       dockerfile: infra/docker/frontend.Dockerfile
     ports:
       - 1234:1234
+    command: sh -c "npm run test && npm run start"
   database:
     image: reader-inquisitor/database
     build:
