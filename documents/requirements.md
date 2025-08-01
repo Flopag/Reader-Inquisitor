@@ -12,8 +12,10 @@ The application must automate the "republique des Gommettes" rules:
 
 When someone reads, it update the advancement of the book on its [goodreads](https://www.goodreads.com/) account. The application will:
 1. Wait the time of the day or night (for example 3AM)
+   1. This time is set by the user
 2. Look to each user goodreads account
 3. If the user have red, give it a green "gommette", if not, give it a red "gommette"
+   1. Before the red "gommette" is given, it will wait X time the user to log its reading.
 4. If needed, make notification
 
 ## Information to get from users
@@ -36,8 +38,14 @@ The discord bot could also say some random stat about someone.
 
 ## Punishments
 
+Punishement come from red "gommettes"
+
 - Punishment could be random from a list
 - Punishment resolution could be verified
+
+## Raward
+
+Reward come from green "gommette". There is a shop that permit to buy thing using green "gommette".
 
 ## Users
 
@@ -45,5 +53,6 @@ There are three types of users:
 - Admin: basic users management
 - Maintainer: application management
 - Basic: no management
+- Bot: power user that have access to all users data
 
 The users are identified using their discord account on the website, using a Discord SSO.

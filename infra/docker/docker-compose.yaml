@@ -4,9 +4,17 @@ services:
     build:
       context: ../..
       dockerfile: infra/docker/backend.Dockerfile
+    environment:
+      - PORT=3000
     ports:
       - 3000:3000
     command: sh -c "npm run test && npm run start"
+    healthcheck:
+      test: ["CMD-SHELL", "./healthcheck.sh"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
   frontend:
     image: reader-inquisitor/frontend
     build:
