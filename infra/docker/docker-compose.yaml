@@ -23,6 +23,12 @@ services:
     ports:
       - 1234:1234
     command: sh -c "npm run test && npm run start"
+    healthcheck:
+      test: ["CMD-SHELL", "./healthcheck.sh"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
   database:
     image: reader-inquisitor/database
     build:
@@ -33,3 +39,9 @@ services:
     ports:
       - 3001:8080
       - 3002:80
+    healthcheck:
+      test: ["CMD-SHELL", "./healthcheck.sh"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
