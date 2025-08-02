@@ -2,39 +2,54 @@
 
 The database is of type sql.
 
-The tables are:
+The tables are (see database folder for more accurate data):
+- Role
+  - **name**: string (admin, maintainer, bot, basic)
 - User
   - **id**
-  - discord id: uint
-  - role: enum (admin, maintainer, bot, basic)
+  - **discord id**: uint
+  - **role** from Role
   - first_connection_date: date
   - last_connection_date: date
+- Gommette_color
+  - **Color**: string (red or green)
 - Gommette
   - **user_id** from User
   - **date**: date
-  - color: enum (red or green)
+  - color from Gommette_color
   - is_used: bool
+- routine_action;
+  - name: string (get log)
+  - description: string
 - Routine
   - **user_id** from user
-  - **routine_id**: uint
+  - **action** from routine_action
   - hour: hour
-  - action: enum (get_log)
+- Book:
+  - **id**
+  - name: string
+  - url: string (optional)
 - Log:
   - **user_id** from user
   - date: date
   - completion: int (from 0 to 100)
-  - book: string (url to goodreads book)
+  - book from Book
+- Punishment_action:
+  - **name** string (make a dish)
+  - description: string
 - Punishment:
-  - **user_id** from user
-  - obtained_date: date
-  - used_date: date
-  - expiration_date: date
-  - action: string (make a dish)
+  - user_id from user
+  - obtained_at: date
+  - done_at: date
+  - expiration_at: date
+  - action from Punishment_action
   - is_done: bool
+- Reward_action:
+  - **name** string (freeze a day)
 - Reward:
-  - **user_id** from user
-  - obtained_date: date
-  - used_date: date
-  - expiration_date: date
-  - action: string (make a dish)
+  - user_id from users
+  - obtained_at: date
+  - done_at: date
+  - expiration_at: date
+  - action from Reward_action
   - is_done: bool

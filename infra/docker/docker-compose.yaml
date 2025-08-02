@@ -36,6 +36,8 @@ services:
       dockerfile: infra/docker/database.Dockerfile
     env_file:
       - database.env
+    volumes:
+      - database_data:/var/lib/mysql
     ports:
       - 3001:8080
       - 3002:80
@@ -45,3 +47,6 @@ services:
       timeout: 30s
       retries: 3
       start_period: 30s
+
+volumes:
+  database_data:
