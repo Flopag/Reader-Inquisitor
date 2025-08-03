@@ -4,7 +4,7 @@ on:
 jobs:
   test-code:
     runs-on: 
-      ubuntu-runners
+      ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Build image
