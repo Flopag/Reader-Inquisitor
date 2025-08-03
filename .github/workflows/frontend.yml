@@ -1,0 +1,13 @@
+name: frontend
+on: 
+  push
+jobs:
+  test-code:
+    runs-on: 
+      ubuntu-runners
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t test-reader_inquisitor/frontend -f ./infra/docker/frontend.Dockerfile .
+      - name: Run tests
+        run: docker run --name test-reader_inquisitor_frontend test-reader_inquisitor/frontend /home/test.sh
