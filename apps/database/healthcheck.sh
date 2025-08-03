@@ -7,3 +7,5 @@ else
     echo "server not responding"
     exit 1
 fi
+
+# Add more complex healthchecks

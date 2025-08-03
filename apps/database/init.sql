@@ -1,5 +1,3 @@
-// Init
-
 CREATE DATABASE user_data;
 USE user_data;
 
@@ -85,8 +83,3 @@ CREATE TABLE user_items (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (shop_item_id) REFERENCES shop_items(item_id) ON DELETE CASCADE
 );
-
-// Use
-
-USE user_data;
-
