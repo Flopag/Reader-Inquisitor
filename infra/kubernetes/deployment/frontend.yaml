@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: reader-inquisitor
+    service: frontend
+spec:
+  selector:
+    matchLabels:
+      app: reader-inquisitor
+      service: frontend
+  template:
+    metadata:
+      labels:
+        app: reader-inquisitor
+        service: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: frontend
+        imagePullPolicy: Never
+        command: ["npm"]
+        args: ["run", "start"]
+        ports:
+        - containerPort: 1234
