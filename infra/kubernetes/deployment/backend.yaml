@@ -19,6 +19,7 @@ spec:
       containers:
       - name: backend
         image: flopag/reader-inquisitor_backend
+        imagePullPolicy: Always
         command: ["npm"]
         args: ["run", "start"]
         env:
