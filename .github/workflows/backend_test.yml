@@ -1,5 +1,6 @@
 name: backend-test
 on: 
+  workflow_call:
   pull_request:
     branches: ["test", "main"]
   push:
