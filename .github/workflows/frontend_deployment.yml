@@ -1,10 +1,10 @@
-name: backend-deployment
+name: frontend-deployment
 on: 
   push:
     branches: ["main"]
 jobs:
   test-code:
-    uses: ./.github/workflows/backend_test.yml
+    uses: ./.github/workflows/frontend_test.yml
 
   deployment:
     needs: test-code
@@ -18,33 +18,33 @@ jobs:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          source: "apps/backend, infra/docker/backend.Dockerfile"
-          target: ${{ vars.SERVER_ROOT_DIRECTORY }}/backend
+          source: "apps/frontend, infra/docker/frontend.Dockerfile"
+          target: ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend
       - name: build image via ssh
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: docker build -t ${{ vars.DOCKER_USER }}/reader-inquisitor_backend -f ${{ vars.SERVER_ROOT_DIRECTORY }}/backend/infra/docker/backend.Dockerfile ${{ vars.SERVER_ROOT_DIRECTORY }}/backend
+          script: docker build -t ${{ vars.DOCKER_USER }}/reader-inquisitor_frontend -f ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend/infra/docker/frontend.Dockerfile ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend
       - name: push image to dockerlab via ssh
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: docker push ${{ vars.DOCKER_USER }}/reader-inquisitor_backend
+          script: docker push ${{ vars.DOCKER_USER }}/reader-inquisitor_frontend
       - name: deploy image via ssh
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl set image deployment/backend flopag/reader-inquisitor_backend=${{ vars.DOCKER_USER }}/reader-inquisitor_backend
+          script: kubectl set image deployment/frontend flopag/reader-inquisitor_frontend=${{ vars.DOCKER_USER }}/reader-inquisitor_frontend
       - name: Verify the rollout using ssh
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl rollout status deployment/backend
+          script: kubectl rollout status deployment/frontend
