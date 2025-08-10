@@ -14,3 +14,16 @@ jobs:
         run: docker build -t test-reader_inquisitor/backend -f ./infra/docker/backend.Dockerfile .
       - name: Run tests
         run: docker run --name test-reader_inquisitor_backend test-reader_inquisitor/backend /home/test.sh
+  deployment:
+    runs-on: 
+      ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_SERVER_HOST }}
+          username: ${{ secrets.SSH_SERVER_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PASSWORD }}
+          source: "apps/backend, infra/docker/backend.Dockerfile, infra/kubernetes/deployment/backend.yaml, infra/kubernetes/service/backend.yaml"
+          target: ~/app/backend
