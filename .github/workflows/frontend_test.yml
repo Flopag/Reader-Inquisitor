@@ -1,7 +1,8 @@
 name: frontend-test
 on: 
+  workflow_call:
   pull_request:
-    branches: ["test"]
+    branches: ["test", "main"]
   push:
     branches: ["test"]
     paths:
