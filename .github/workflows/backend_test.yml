@@ -1,7 +1,7 @@
 name: backend-test
 on: 
   pull_request:
-    branches: ["test"]
+    branches: ["test", "main"]
   push:
     branches: ["test"]
     paths:
