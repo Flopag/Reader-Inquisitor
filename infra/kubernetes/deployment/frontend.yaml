@@ -19,6 +19,7 @@ spec:
       containers:
       - name: frontend
         image: flopag/reader-inquisitor_frontend
+        imagePullPolicy: Always
         command: ["npm"]
         args: ["run", "start"]
         ports:

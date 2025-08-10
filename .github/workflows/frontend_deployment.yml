@@ -12,35 +12,22 @@ jobs:
       ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Copy source code via SSH
-        uses: appleboy/scp-action@v1
+      - name: log into docker hub
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.SSH_SERVER_HOST }}
-          username: ${{ secrets.SSH_SERVER_USERNAME }}
-          password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          source: "apps/frontend, infra/docker/frontend.Dockerfile"
-          target: ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend
-      - name: build image via ssh
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_SERVER_HOST }}
-          username: ${{ secrets.SSH_SERVER_USERNAME }}
-          password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: docker build -t ${{ vars.DOCKER_USER }}/reader-inquisitor_frontend -f ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend/infra/docker/frontend.Dockerfile ${{ vars.SERVER_ROOT_DIRECTORY }}/frontend
-      - name: push image to dockerlab via ssh
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_SERVER_HOST }}
-          username: ${{ secrets.SSH_SERVER_USERNAME }}
-          password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: docker push ${{ vars.DOCKER_USER }}/reader-inquisitor_frontend
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: build image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA} -f ./infra/docker/frontend.Dockerfile .
+      - name: push image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA}
       - name: deploy image via ssh
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl set image deployment/frontend flopag/reader-inquisitor_frontend=${{ vars.DOCKER_USER }}/reader-inquisitor_frontend
+          script: kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA}
       - name: Verify the rollout using ssh
         uses: appleboy/ssh-action@v1
         with:
