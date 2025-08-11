@@ -49,7 +49,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mysqlpassword
-              key: MYSQL_ROOT_PASSWORD
+              key: MYSQL_PASSWORD
         - name: EXPRESS_SESSION_SECRET
           valueFrom:
             secretKeyRef:
