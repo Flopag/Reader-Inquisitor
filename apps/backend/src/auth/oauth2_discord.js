@@ -16,7 +16,7 @@ passport.use(new DiscordStrategy({
 function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({
         where: {discord_id: profile.id},
-        default: {
+        defaults: {
             role_name: "Basic",
         },
     }).then(([user, created]) => {
