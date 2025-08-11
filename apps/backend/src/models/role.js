@@ -1,9 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('@utils/mysql_connection');
 
-const Role = sequelize.define('Role', {
+module.exports = sequelize.define('Role', {
   role_name: {
     type: DataTypes.STRING(16),
     allowNull: false,

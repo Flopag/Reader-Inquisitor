@@ -1,9 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('@utils/mysql_connection');
 
-const ShopItem = sequelize.define('ShopItem', {
+module.exports = sequelize.define('ShopItem', {
   item_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,

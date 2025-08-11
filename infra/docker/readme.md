@@ -1,0 +1,18 @@
+# Docker .env files
+
+## backen.env
+
+- `DISCORD_ID`
+- `DISCORD_SECRET`
+- `DISCORD_CALLBACK_URL`
+- `PORT`
+- `MYSQL_DATABASE`
+- `MYSQL_USERNAME`
+- `MYSQL_PASSWORD`
+- `MYSQL_HOST`
+- `MYSQL_PORT`
+- `EXPRESS_SESSION_SECRET`
+
+## database.env
+
+- `MYSQL_ROOT_PASSWORD`

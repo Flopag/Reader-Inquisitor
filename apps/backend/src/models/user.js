@@ -1,16 +1,15 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('@utils/mysql_connection');
 
-const User = sequelize.define('User', {
+module.exports = sequelize.define('User', {
   user_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,
     primaryKey: true,
   },
   discord_id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
     unique: true,
   },

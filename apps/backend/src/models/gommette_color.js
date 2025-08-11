@@ -1,9 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('@utils/mysql_connection');
 
-const GommetteColor = sequelize.define('GommetteColor', {
+module.exports = sequelize.define('GommetteColor', {
   color: {
     type: DataTypes.STRING(16),
     allowNull: false,

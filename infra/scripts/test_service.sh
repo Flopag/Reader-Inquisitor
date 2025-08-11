@@ -12,7 +12,7 @@ docker build -t test-${app_name}/${service_name} -f ../docker/${service_name}.Do
 
 echo "============================================"
 
-docker run --name test-${app_name}_${service_name} test-${app_name}/${service_name} /home/test.sh
+docker run --name test-${app_name}_${service_name} --env-file ../docker/${service_name}.env test-${app_name}/${service_name} /home/test.sh
 exit_code=$?
 
 echo "============================================"

@@ -1,9 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('@utils/mysql_connection');
 
-const Currency = sequelize.define('Currency', {
+module.exports = sequelize.define('Currency', {
   currency_name: {
     type: DataTypes.STRING(32),
     allowNull: false,
