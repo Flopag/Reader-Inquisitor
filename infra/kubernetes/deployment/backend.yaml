@@ -25,6 +25,36 @@ spec:
         env:
         - name: PORT
           value: "3000"
+        - name: DISCORD_ID
+          value: "1404369039039660034"
+        - name: DISCORD_CALLBACK_URL
+          value: "http://gouguel.com:8080/auth/discord/callback"
+        - name: MYSQL_DATABASE
+          value: "user_data"
+        - name: MYSQL_HOST
+          value: "database.default.svc.cluster.local"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: DISCORD_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: discordsecret
+              key: DISCORD_SECRET
+        - name: MYSQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysqlusername
+              key: MYSQL_USERNAME
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlpassword
+              key: MYSQL_ROOT_PASSWORD
+        - name: EXPRESS_SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: expresssessionsecret
+              key: EXPRESS_SESSION_SECRET
         ports:
         - containerPort: 3000
       

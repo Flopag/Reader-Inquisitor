@@ -8,7 +8,7 @@ CREATE TABLE roles (
 
 CREATE TABLE users (
     user_id INT UNSIGNED AUTO_INCREMENT,
-    discord_id INT UNSIGNED NOT NULL UNIQUE,
+    discord_id BIGINT UNSIGNED NOT NULL UNIQUE,
     role_name VARCHAR(16),
     PRIMARY KEY (user_id),
     FOREIGN KEY (role_name) REFERENCES roles(role_name) ON DELETE SET NULL
@@ -83,3 +83,5 @@ CREATE TABLE user_items (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (shop_item_id) REFERENCES shop_items(item_id) ON DELETE CASCADE
 );
+
+INSERT INTO roles (role_name) VALUES ('Admin'), ('Maintainer'), ('Basic'), ('Bot');
