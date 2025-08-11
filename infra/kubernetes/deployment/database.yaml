@@ -27,7 +27,7 @@ spec:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: reader-inquisitor-database
+                name: mysqlpassword
                 key: MYSQL_ROOT_PASSWORD
       volumes:
         - name: mysql-storage
