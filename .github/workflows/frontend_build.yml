@@ -1,6 +1,11 @@
 name: frontend-build
 on: 
   workflow_call:
+    secrets:
+      DOCKER_HUB_USERNAME:
+        required: true
+      DOCKER_HUB_PASSWORD:
+        required: true
 jobs:
   build_then_push:
     runs-on: 
@@ -12,8 +17,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          ecr: false
-          logout: false
       - name: build image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA} -f ./infra/docker/frontend.Dockerfile .
       - name: push image
