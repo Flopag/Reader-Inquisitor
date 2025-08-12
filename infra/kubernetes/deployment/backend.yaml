@@ -32,7 +32,7 @@ spec:
         - name: MYSQL_DATABASE
           value: "user_data"
         - name: MYSQL_HOST
-          value: "database.default.svc.cluster.local"
+          value: "database"
         - name: MYSQL_PORT
           value: "3306"
         - name: DISCORD_SECRET

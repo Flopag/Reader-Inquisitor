@@ -1,0 +1,23 @@
+name: deployment
+on: 
+  push:
+    branches: ["main"]
+jobs:
+  test-frontend-code:
+    uses: ./.github/workflows/frontend_test.yml
+  test-backend-code:
+    uses: ./.github/workflows/backend_test.yml
+
+  build-frontend:
+    needs: test-frontend-code
+    uses: ./.github/workflows/frontend_build.yml
+  build-backend:
+    needs: test-backend-code
+    uses: ./.github/workflows/backend_build.yml
+
+  deployment-frontend:
+    needs: [build-frontend, build-backend]
+    uses: ./.github/workflows/frontend_deployment.yml
+  deployment-backend:
+    needs: [build-frontend, build-backend]
+    uses: ./.github/workflows/backend_deployment.yml
