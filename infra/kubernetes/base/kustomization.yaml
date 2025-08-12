@@ -1,0 +1,9 @@
+resources:
+  - deployment/backend.yaml
+  - deployment/frontend.yaml
+  - deployment/database.yaml
+  - service/backend.yaml
+  - service/frontend.yaml
+  - service/database.yaml
+  - persistentVolumeClaim/database.yaml
+  - namespace/prod.yaml

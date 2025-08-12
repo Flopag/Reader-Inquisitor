@@ -27,8 +27,8 @@ spec:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: mysqlpassword
-                key: MYSQL_ROOT_PASSWORD
+                name: database
+                key: MYSQL_PASSWORD
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:

@@ -1,0 +1,6 @@
+namespace: prod
+resources:
+- ../../base/
+namePrefix: prod-
+patches:
+  - path: deployment/backend-patch.yaml
