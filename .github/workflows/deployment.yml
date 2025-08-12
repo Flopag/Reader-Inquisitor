@@ -34,6 +34,7 @@ jobs:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
       SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   deployment-backend:
     needs: [build-frontend, build-backend]
     uses: ./.github/workflows/backend_deployment.yml
@@ -43,3 +44,4 @@ jobs:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
       SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
