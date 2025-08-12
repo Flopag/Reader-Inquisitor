@@ -32,7 +32,7 @@ jobs:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl set image deployment/${{ inputs.namespace }}-${{ inputs.service }} ${{ inputs.service }}=${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:${{ inputs.build_tag }}
+          script: kubectl set image -n ${{ inputs.namespace }} deployment/${{ inputs.namespace }}-${{ inputs.service }} ${{ inputs.service }}=${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:${{ inputs.build_tag }}
       - name: Verify the rollout using ssh
         uses: appleboy/ssh-action@v1
         with:
@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
           script: |
-            if ! kubectl rollout status deployment/${{ inputs.namespace }}-${{ inputs.service }} --timeout=180s; then
-              kubectl rollout undo deployment/${{ inputs.namespace }}-${{ inputs.service }}
+            if ! kubectl rollout status -n ${{ inputs.namespace }} deployment/${{ inputs.namespace }}-${{ inputs.service }} --timeout=180s; then
+              kubectl rollout undo -n ${{ inputs.namespace }} deployment/${{ inputs.namespace }}-${{ inputs.service }}
               exit 1
             fi
