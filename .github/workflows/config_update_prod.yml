@@ -9,7 +9,7 @@ on:
       SSH_SERVER_USERNAME:
         required: true
 jobs:
-  deployment:
+  configuration-update:
     runs-on: 
       ubuntu-latest
     steps:
