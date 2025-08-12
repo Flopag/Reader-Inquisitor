@@ -1,6 +1,13 @@
 name: config_update_prod
 on: 
   workflow_call:
+    secrets:
+      SSH_SERVER_HOST:
+        required: true
+      SSH_SERVER_PASSWORD:
+        required: true
+      SSH_SERVER_USERNAME:
+        required: true
 jobs:
   deployment:
     runs-on: 
