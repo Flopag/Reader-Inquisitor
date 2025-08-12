@@ -24,4 +24,7 @@ jobs:
       - name: build image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${{ inputs.build_tag }} -f ./infra/docker/frontend.Dockerfile .
       - name: push image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${{ inputs.build_tag }}
+        run: |
+          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${{ inputs.build_tag }} ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${{ inputs.build_tag }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:latest
