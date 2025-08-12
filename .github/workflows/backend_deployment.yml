@@ -12,6 +12,8 @@ on:
         required: true
       SSH_SERVER_USERNAME:
         required: true
+      DOCKER_HUB_USERNAME:
+        required: true
 jobs:
   deployment:
     runs-on: 
