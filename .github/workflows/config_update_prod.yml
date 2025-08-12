@@ -17,9 +17,9 @@ jobs:
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.SSH_SERVER_HOST }}
+          username: ${{ secrets.SSH_SERVER_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PASSWORD }}
           source: "infra/kubernetes"
           target: ~/app
       - name: deploy image via ssh
