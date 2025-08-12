@@ -1,0 +1,14 @@
+name: code_test
+on: 
+  workflow_call:
+  pull_request:
+    branches: ["test", "main"]
+jobs:
+  test-frontend-code:
+    uses: ./.github/workflows/service_test.yml
+    with:
+      service: frontend
+  test-backend-code:
+    uses: ./.github/workflows/service_test.yml
+    with:
+      service: backend

@@ -1,12 +1,10 @@
-name: service-test
+name: service-code-test
 on: 
   workflow_call:
     inputs:
       service:
         required: true
         type: string
-  pull_request:
-    branches: ["test", "main"]
 jobs:
   test-code:
     runs-on: 

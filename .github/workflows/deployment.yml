@@ -3,17 +3,11 @@ on:
   push:
     branches: ["main"]
 jobs:
-  test-frontend-code:
-    uses: ./.github/workflows/service_test.yml
-    with:
-      service: frontend
-  test-backend-code:
-    uses: ./.github/workflows/service_test.yml
-    with:
-      service: backend
+  code-test:
+    uses: ./.github/workflows/code_test.yml
 
   build-frontend:
-    needs: test-frontend-code
+    needs: code-test
     uses: ./.github/workflows/service_build.yml
     with:
       build_tag: ${{ github.sha }}
@@ -22,7 +16,7 @@ jobs:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
   build-backend:
-    needs: test-backend-code
+    needs: code-test
     uses: ./.github/workflows/service_build.yml
     with:
       build_tag: ${{ github.sha }}
