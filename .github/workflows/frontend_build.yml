@@ -1,0 +1,18 @@
+name: frontend-build
+on: 
+  workflow_call:
+jobs:
+  build_then_push:
+    runs-on: 
+      ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: log into docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: build image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA} -f ./infra/docker/frontend.Dockerfile .
+      - name: push image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_frontend:${GITHUB_SHA}
