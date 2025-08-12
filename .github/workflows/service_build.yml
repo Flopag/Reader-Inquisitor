@@ -1,0 +1,33 @@
+name: service-build
+on: 
+  workflow_call:
+    inputs:
+      build_tag:
+        required: true
+        type: string
+      service:
+        required: true
+        type: string
+    secrets:
+      DOCKER_HUB_USERNAME:
+        required: true
+      DOCKER_HUB_PASSWORD:
+        required: true
+jobs:
+  build_then_push:
+    runs-on: 
+      ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: log into docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: build image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:${{ inputs.build_tag }} -f ./infra/docker/${{ inputs.service }}.Dockerfile .
+      - name: push image
+        run: |
+          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:${{ inputs.build_tag }} ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:${{ inputs.build_tag }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_${{ inputs.service }}:latest

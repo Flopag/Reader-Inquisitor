@@ -1,0 +1,17 @@
+name: service-code-test
+on: 
+  workflow_call:
+    inputs:
+      service:
+        required: true
+        type: string
+jobs:
+  test-code:
+    runs-on: 
+      ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t test-reader_inquisitor/${{ inputs.service }} -f ./infra/docker/${{ inputs.service }}.Dockerfile .
+      - name: Run tests
+        run: docker run --name test-reader_inquisitor_${{ inputs.service }} --env-file ./infra/docker/${{ inputs.service }}.env test-reader_inquisitor/${{ inputs.service }} /home/test.sh

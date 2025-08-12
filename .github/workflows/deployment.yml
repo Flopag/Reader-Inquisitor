@@ -3,24 +3,24 @@ on:
   push:
     branches: ["main"]
 jobs:
-  test-frontend-code:
-    uses: ./.github/workflows/frontend_test.yml
-  test-backend-code:
-    uses: ./.github/workflows/backend_test.yml
+  code-test:
+    uses: ./.github/workflows/code_test.yml
 
   build-frontend:
-    needs: test-frontend-code
-    uses: ./.github/workflows/frontend_build.yml
+    needs: code-test
+    uses: ./.github/workflows/service_build.yml
     with:
-        build_tag: ${{ github.sha }}
+      build_tag: ${{ github.sha }}
+      service: frontend
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
   build-backend:
-    needs: test-backend-code
-    uses: ./.github/workflows/backend_build.yml
+    needs: code-test
+    uses: ./.github/workflows/service_build.yml
     with:
-        build_tag: ${{ github.sha }}
+      build_tag: ${{ github.sha }}
+      service: backend
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -35,9 +35,11 @@ jobs:
 
   deployment-frontend:
     needs: [update-configuration]
-    uses: ./.github/workflows/frontend_deployment.yml
+    uses: ./.github/workflows/service_deployment.yml
     with:
-        build_tag: ${{ github.sha }}
+      build_tag: ${{ github.sha }}
+      namespace: prod
+      service: frontend
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
@@ -45,9 +47,11 @@ jobs:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   deployment-backend:
     needs: [update-configuration]
-    uses: ./.github/workflows/backend_deployment.yml
+    uses: ./.github/workflows/service_deployment.yml
     with:
-        build_tag: ${{ github.sha }}
+      build_tag: ${{ github.sha }}
+      namespace: prod
+      service: backend
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
