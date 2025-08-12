@@ -25,6 +25,9 @@ jobs:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
+  update-configuration:
+    uses: ./.github/workflows/config_update_prod.yml
+
   deployment-frontend:
     needs: [build-frontend, build-backend]
     uses: ./.github/workflows/frontend_deployment.yml

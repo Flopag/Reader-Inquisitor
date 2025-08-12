@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  template:
+    spec:
+      containers:
+      - name: backend
+        env:
+        - name: MYSQL_HOST
+          value: "prod-database"
+        - name: DISCORD_CALLBACK_URL
+          value: "http://gouguel.com:8080/auth/discord/callback"
