@@ -5,10 +5,10 @@ on:
     branches: ["test", "main"]
 jobs:
   test-frontend-code:
-    uses: ./.github/workflows/service_test.yml
+    uses: ./.github/workflows/service_code_test.yml
     with:
       service: frontend
   test-backend-code:
-    uses: ./.github/workflows/service_test.yml
+    uses: ./.github/workflows/service_code_test.yml
     with:
       service: backend
