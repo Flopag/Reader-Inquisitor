@@ -11,12 +11,16 @@ jobs:
   build-frontend:
     needs: test-frontend-code
     uses: ./.github/workflows/frontend_build.yml
+    with:
+        build_tag: ${GITHUB_SHA}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
   build-backend:
     needs: test-backend-code
     uses: ./.github/workflows/backend_build.yml
+    with:
+        build_tag: ${GITHUB_SHA}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -24,6 +28,8 @@ jobs:
   deployment-frontend:
     needs: [build-frontend, build-backend]
     uses: ./.github/workflows/frontend_deployment.yml
+    with:
+        build_tag: ${GITHUB_SHA}
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
@@ -31,6 +37,8 @@ jobs:
   deployment-backend:
     needs: [build-frontend, build-backend]
     uses: ./.github/workflows/backend_deployment.yml
+    with:
+        build_tag: ${GITHUB_SHA}
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}

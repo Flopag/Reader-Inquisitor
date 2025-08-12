@@ -1,6 +1,10 @@
 name: backend-deployment
 on: 
   workflow_call:
+    inputs:
+      build_tag:
+        required: true
+        type: string
     secrets:
       SSH_SERVER_HOST:
         required: true
@@ -20,7 +24,7 @@ jobs:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl set image deployment/backend backend=${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_backend:${{ github.sha }}
+          script: kubectl set image deployment/backend backend=${{ secrets.DOCKER_HUB_USERNAME }}/reader-inquisitor_backend:${{ inputs.build_tag }}
       - name: Verify the rollout using ssh
         uses: appleboy/ssh-action@v1
         with:
