@@ -23,6 +23,16 @@ spec:
         volumeMounts:
         - name: mysql-storage
           mountPath: /var/lib/mysql
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - ./healthcheck.sh
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:

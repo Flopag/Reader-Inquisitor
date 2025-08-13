@@ -24,3 +24,13 @@ spec:
         args: ["run", "start"]
         ports:
         - containerPort: 1234
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - ./healthcheck.sh
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6

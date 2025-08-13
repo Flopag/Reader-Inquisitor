@@ -22,6 +22,16 @@ spec:
         imagePullPolicy: Always
         command: ["npm"]
         args: ["run", "start"]
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - ./healthcheck.sh
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
         env:
         - name: PORT
           value: "3000"
