@@ -1,0 +1,19 @@
+namespace: e2e
+resources:
+- ../../base/
+namePrefix: e2e-
+patches:
+  - path: deployment/backend-patch.yaml
+  - path: service/backend-patch.yaml
+  - path: service/frontend-patch.yaml
+secretGenerator:
+  - name: database
+    literals:
+      - MYSQL_USERNAME="root"
+      - MYSQL_PASSWORD="notthetruepass"
+  - name: discord
+    literals:
+      - DISCORD_SECRET="donotwork"
+  - name: express
+    literals:
+      - EXPRESS_SESSION_SECRET="Doyourealythingthatisthesecret"
