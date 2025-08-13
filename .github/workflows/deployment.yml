@@ -24,17 +24,28 @@ jobs:
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-  update-configuration:
+    
+  e2e-test:
     needs: [build-frontend, build-backend]
-    uses: ./.github/workflows/config_update_prod.yml
+    uses: ./.github/workflows/e2e_test.yml
+    secrets:
+      SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
+      SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
+      SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
+      POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+
+  update-configuration-prod:
+    needs: [e2e-test]
+    uses: ./.github/workflows/config_update_or_create.yml
+    with:
+      namespace: prod
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
       SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
 
   deployment-frontend:
-    needs: [update-configuration]
+    needs: [update-configuration-prod]
     uses: ./.github/workflows/service_deployment.yml
     with:
       build_tag: ${{ github.sha }}
@@ -46,7 +57,7 @@ jobs:
       SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   deployment-backend:
-    needs: [update-configuration]
+    needs: [update-configuration-prod]
     uses: ./.github/workflows/service_deployment.yml
     with:
       build_tag: ${{ github.sha }}

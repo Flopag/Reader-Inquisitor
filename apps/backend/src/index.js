@@ -7,7 +7,7 @@ var session = require('express-session')
 const app = express()
 const port = process.env.PORT
 
-/* Session configuration */
+/* middleware configuration */
 
 // code from https://www.npmjs.com/package/express-session
 app.set('trust proxy', 1)
@@ -20,6 +20,9 @@ app.use(session({
 
 app.use(require('@app/auth/oauth2_discord').initialize());
 app.use(require('@app/auth/oauth2_discord').session());
+app.use(express.json());
+if(process.env.IS_TESTING)
+  app.use(require('@app/auth/middlewares').mocked_user);
 
 /* path */
 
@@ -31,9 +34,9 @@ app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
 
-app.get('/me', (req, res) => {
-    if (!req.user) return res.status(401).json({ error: 'Not logged in' });
-    res.send(`Hello, your are the user number ${req.user.user_id} connected with the discord account ${req.user.discord_id}.`);
+app.get('/me', require('@app/auth/middlewares').throw_if_not_connected, 
+(req, res) => {
+  res.send(`Hello, your are the user number ${req.user.user_id} connected with the discord account ${req.user.discord_id} having the role ${req.user.role_name}.`);
 });
 
 app.get('/health', async (req, res) => {

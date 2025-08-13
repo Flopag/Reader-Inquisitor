@@ -1,0 +1,59 @@
+name: e2e_test
+on: 
+  workflow_call:
+    secrets:
+      SSH_SERVER_HOST:
+        required: true
+      SSH_SERVER_PASSWORD:
+        required: true
+      SSH_SERVER_USERNAME:
+        required: true
+      POSTMAN_API_KEY:
+        required: true
+jobs:
+  deployment-of-e2e-environnment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy-e2e
+        uses: ./.github/workflows/config_update_or_create.yml
+        with:
+          namespace: e2e
+        secrets:
+          SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
+          SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
+          SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
+      - name: Wait for all pods to be ready
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_SERVER_HOST }}
+          username: ${{ secrets.SSH_SERVER_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PASSWORD }}
+          script: kubectl wait --for=condition=Ready pods --all -n e2e --timeout=180s
+
+  automated-api-tests:
+    needs: [deployment-of-e2e-environnment]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run "33455248-e185815e-ef57-46e2-81ac-f34a6116f9b0" -e "33455248-ea494517-398f-41c7-8715-59997f56f9f3"
+
+  cleaning-of-e2e-environnment:
+    if: always()
+    needs: [automated-api-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: update configuration via ssh
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_SERVER_HOST }}
+          username: ${{ secrets.SSH_SERVER_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PASSWORD }}
+          script: kubectl delete namespace e2e
