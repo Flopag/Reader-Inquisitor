@@ -1,6 +1,10 @@
-name: config_update_prod
+name: config_update_or_create
 on: 
   workflow_call:
+    inputs:
+      namespace:
+        required: true
+        type: string
     secrets:
       SSH_SERVER_HOST:
         required: true
@@ -28,4 +32,4 @@ jobs:
           host: ${{ secrets.SSH_SERVER_HOST }}
           username: ${{ secrets.SSH_SERVER_USERNAME }}
           password: ${{ secrets.SSH_SERVER_PASSWORD }}
-          script: kubectl apply -k ~/app/infra/kubernetes/overlays/prod
+          script: kubectl apply -k ~/app/infra/kubernetes/overlays/${{ inputs.namespace }}

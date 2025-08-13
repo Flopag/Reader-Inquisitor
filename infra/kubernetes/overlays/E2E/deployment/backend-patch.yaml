@@ -12,3 +12,5 @@ spec:
           value: "e2e-database"
         - name: DISCORD_CALLBACK_URL
           value: "todetermine"
+        - name: IS_TESTING
+          value: "justarandomstring"
