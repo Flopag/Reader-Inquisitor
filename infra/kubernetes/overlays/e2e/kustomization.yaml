@@ -9,11 +9,11 @@ patches:
 secretGenerator:
   - name: database
     literals:
-      - MYSQL_USERNAME="root"
-      - MYSQL_PASSWORD="notthetruepass"
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=notthetruepass
   - name: discord
     literals:
-      - DISCORD_SECRET="donotwork"
+      - DISCORD_SECRET=donotwork
   - name: express
     literals:
-      - EXPRESS_SESSION_SECRET="Doyourealythingthatisthesecret"
+      - EXPRESS_SESSION_SECRET=Doyourealythingthatisthesecret
