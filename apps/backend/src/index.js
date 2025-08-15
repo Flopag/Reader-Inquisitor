@@ -38,11 +38,11 @@ app.get('/health', async (req, res) => {
     } catch (error) {
         console.error('[health]: Unable to connect to the database:', error);
         res.status(500).json({
-        "success": false,
-        "message": "Unable to connect to the database",
-        "data": {},
-        "error_code": null,
-    });
+            "success": false,
+            "message": "Unable to connect to the database",
+            "data": {},
+            "error_code": null,
+        });
         return;
     }
 
@@ -54,7 +54,8 @@ app.get('/health', async (req, res) => {
     });
 });
 
-app.use('/auth', require('./auth/index'));
+app.use('/auth', require('@app/auth/index'));
+app.use('/books', require('@app/books/index'));
 
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({
