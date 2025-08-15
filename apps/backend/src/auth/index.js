@@ -3,18 +3,17 @@ const passport = require('@app/auth/oauth2_discord');
 
 const router = express.Router();
 
-
-if(process.env.IS_TESTING)
-    router.use(require('@app/auth/middlewares').mocked_user);
-router.use(require('@app/auth/middlewares').is_connected);
-
 router.get('/discord', passport.authenticate('discord'));
 
 router.get('/discord/callback', passport.authenticate('discord', {
     failureRedirect: '/'
 }), function(req, res) {
-    res.redirect('/me')
+    res.redirect('/');
 });
+
+if(process.env.IS_TESTING)
+    router.use(require('@app/auth/middlewares').mocked_user);
+router.use(require('@app/auth/middlewares').is_connected);
 
 router.get('/me',
 (req, res) => {

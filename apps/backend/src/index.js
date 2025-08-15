@@ -28,6 +28,10 @@ app.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
 
+app.get('/', (req, res) => {
+    res.redirect('/auth/me');
+});
+
 app.get('/health', async (req, res) => {
     try {
         await sequelize.authenticate();
