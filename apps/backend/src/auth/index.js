@@ -17,7 +17,6 @@ router.use(require('@app/auth/middlewares').is_connected);
 
 router.get('/me',
 (req, res) => {
-    res.send(`Hello, your are the user number ${req.user.user_id} connected with the discord account ${req.user.discord_id} having the role ${req.user.role_name}.`);
     res.status(200).json({
         "success": true,
         "message": `Your are the user number ${req.user.user_id} connected with the discord account ${req.user.discord_id} having the role ${req.user.role_name}`,
