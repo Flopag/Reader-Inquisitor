@@ -1,5 +1,5 @@
 const express = require('express');
-const Book = require('@models/book');
+const BookService = require('@app/books/service');
 
 const router = express.Router();
 
@@ -32,7 +32,6 @@ async (req, res) => {
         return;
     }
 
-    console.log(goodreads_url.pathname);
     if(!(goodreads_url.pathname.split("/")[1] === "book" && 
          goodreads_url.pathname.split("/")[2] === "show")){
         res.status(400).json({
@@ -75,7 +74,7 @@ async (req, res) => {
     }
 
     try {
-        if(await Book.findOne({where: {book_name: book_name}})){
+        if(await BookService.does_exist_by_name(book_name)){
             res.status(400).json({
                 "success": false,
                 "message": `The book ${book_name} already exist`,
@@ -85,12 +84,7 @@ async (req, res) => {
             return;
         }
     
-        const [new_book, success] = await Book.findOrCreate({
-            where: {
-                book_name: book_name,
-            },
-            defaults: {book_reference_url: goodreads_url.href},
-        });
+        const new_book = await BookService.find_or_create(book_name, goodreads_url.href);
 
         res.status(200).json({
             "success": true,
@@ -114,7 +108,7 @@ router.get('/',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
     try {
-        const books = await Book.findAll();
+        const books = await BookService.find_all();
 
         res.status(200).json({
             "success": true,
@@ -150,7 +144,7 @@ async (req, res) => {
     }
 
     try {
-        if(!(await Book.findOne({where: {book_id: book_id}}))){
+        if(!(await BookService.does_exist_by_id(book_id))){
             res.status(400).json({
                 "success": false,
                 "message": `The book ${book_id} do not exist`,
@@ -160,7 +154,7 @@ async (req, res) => {
             return;
         }
 
-        await Book.destroy({where: {book_id: book_id}});
+        await BookService.destroy(book_id);
 
         res.status(200).json({
             "success": true,
