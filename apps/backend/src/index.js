@@ -56,6 +56,7 @@ app.get('/health', async (req, res) => {
 
 app.use('/auth', require('@app/auth/index'));
 app.use('/books', require('@app/books/index'));
+app.use('/logs', require('@app/logs/index'));
 
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({

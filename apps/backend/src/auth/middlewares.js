@@ -12,8 +12,8 @@ function is_connected(req, res, next) {
 
 function mocked_user(req, res, next) {
     if(!req.body || !req.body.user || !req.body.user.discord_id){
-        var err = new Error('no body, body.user,  or body.user.discord_id in the request');
-        err.status = 400
+        var err = new Error(`no body, body.user,  or body.user.discord_id in the request`);
+        err.status = 400;
         next(err);
         return;
     }

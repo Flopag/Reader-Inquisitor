@@ -39,11 +39,12 @@ CREATE TABLE user_gommettes (
 );
 
 CREATE TABLE read_logs (
+    read_log_id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     logged_at DATETIME NOT NULL,
     completion TINYINT NOT NULL CHECK (completion<=100),
     book_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (user_id, logged_at),
+    PRIMARY KEY (read_log_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
 );

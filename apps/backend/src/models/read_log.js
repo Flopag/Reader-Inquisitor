@@ -3,10 +3,14 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('@utils/mysql_connection');
 
 module.exports = sequelize.define('ReadLog', {
+  read_log_id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   user_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
-    primaryKey: true,
     references: {
       model: 'users',
       key: 'user_id',
@@ -16,7 +20,6 @@ module.exports = sequelize.define('ReadLog', {
   logged_at: {
     type: DataTypes.DATE,
     allowNull: false,
-    primaryKey: true,
   },
   completion: {
     type: DataTypes.TINYINT,
