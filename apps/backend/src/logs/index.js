@@ -32,6 +32,22 @@ async (req, res) => {
     Respond.success(res, `See data for the new log informations`, new_log.get());
 });
 
+router.get('/completion/:book_id',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const { book_id } = req.params;
+
+    if(!book_id)
+        ErrorFactory.bad_argument(`The id of the book is missing`);
+
+    if(!await BookService.does_exist_by_id(book_id))
+        ErrorFactory.bad_argument(`The book with id=${book_id} does not exist`);
+
+    const data = await LogService.get_latest_completion(req.user.user_id, book_id);
+
+    Respond.success(res, `See data for the last completion corresponding to book id=${book_id}`, data);
+});
+
 router.get('/:book_id',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
@@ -62,6 +78,20 @@ async (req, res) => {
     const new_log = await LogService.find_or_create(req.user.user_id, book_id, 0);
 
     Respond.success(res, `The completion for the book id=${book_id} has been reset to 0`, new_log.get());
+});
+
+router.delete('/:log_id',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const { log_id } = req.params;
+
+    if(!log_id)
+        ErrorFactory.bad_argument(`The id of the log is missing`);
+
+    if(await LogService.destroy_by_id(log_id) === 0)
+        ErrorFactory.bad_argument(`The log with id=${log_id} does not exist`);
+
+    Respond.success(res, `The log with id=${log_id} has been successfully deleted`, {});
 });
 
 module.exports = router;
