@@ -27,7 +27,7 @@ async function find_or_create(user_id, book_id, completion){
 async function get_latest_completion(user_id, book_id){
     const response = (await Log.findOne({
             where: {user_id: user_id, book_id: book_id},
-            order: [['logged_at', 'DESC']],
+            order: [['read_log_id', 'DESC']],
             attributes: ['completion'],
         }));
     return (response) ? response.completion : null;
@@ -36,7 +36,7 @@ async function get_latest_completion(user_id, book_id){
 async function get_all_logs(user_id, book_id){
     return (await Log.findAll({
             where: {user_id: user_id, book_id: book_id},
-            order: [['logged_at', 'DESC']],
+            order: [['read_log_id', 'DESC']],
         }));
 }
 
