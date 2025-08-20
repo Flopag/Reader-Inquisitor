@@ -34,4 +34,20 @@ async (req, res) => {
     Respond.success(res, `See data for the new log informations`, new_log.get());
 });
 
+router.get('/:book_id',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const { book_id } = req.params;
+
+    if(!book_id)
+        ErrorFactory.bad_argument(`The id of the book is missing`);
+
+    if(!await BookService.does_exist_by_id(book_id))
+        ErrorFactory.bad_argument(`The book with id=${book_id} does not exist`);
+
+    const data = await LogService.get_all_logs(req.user.user_id, book_id);
+
+    Respond.success(res, `See data for the list og logs corresponding to book id=${book_id}`, data);
+});
+
 module.exports = router;

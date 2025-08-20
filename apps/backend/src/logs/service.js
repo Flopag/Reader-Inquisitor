@@ -41,7 +41,19 @@ async function get_latest_completion(user_id, book_id){
     }
 }
 
+async function get_all_logs(user_id, book_id){
+    try {
+        return (await Log.findAll({
+                where: {user_id: user_id, book_id: book_id},
+                order: [['logged_at', 'DESC']],
+            }));
+    } catch (err) {
+        throw new Error(`[LogService/get_all_logs]: ${err.message}`);
+    }
+}
+
 module.exports = {
     find_or_create,
-    get_latest_completion
+    get_latest_completion,
+    get_all_logs,
 };
