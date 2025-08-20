@@ -27,9 +27,7 @@ async (req, res) => {
     if(lastest_completion && lastest_completion >= req.body.completion)
         ErrorFactory.bad_argument(`The completion (${req.body.completion}) must be greater than the previous one (${lastest_completion})`);
 
-    var new_log;
-
-    new_log = await LogService.find_or_create(req.user.user_id, req.body.book_id, req.body.completion);
+    const new_log = await LogService.find_or_create(req.user.user_id, req.body.book_id, req.body.completion);
 
     Respond.success(res, `See data for the new log informations`, new_log.get());
 });
@@ -48,6 +46,22 @@ async (req, res) => {
     const data = await LogService.get_all_logs(req.user.user_id, book_id);
 
     Respond.success(res, `See data for the list og logs corresponding to book id=${book_id}`, data);
+});
+
+router.post('/reset/:book_id',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const { book_id } = req.params;
+
+    if(!book_id)
+        ErrorFactory.bad_argument(`The id of the book is missing`);
+
+    if(!await BookService.does_exist_by_id(book_id))
+        ErrorFactory.bad_argument(`The book with id=${book_id} does not exist`);
+
+    const new_log = await LogService.find_or_create(req.user.user_id, book_id, 0);
+
+    Respond.success(res, `The completion for the book id=${book_id} has been reset to 0`, new_log.get());
 });
 
 module.exports = router;
