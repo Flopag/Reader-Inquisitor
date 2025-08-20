@@ -24,19 +24,20 @@ async function find_or_create(user_id, book_id, completion){
             defaults: {},
         }))[0];
     } catch (err) {
-        throw new Error(`[LogService/find_or_create]: An error occured with the database: ${err.message}`);
+        throw new Error(`[LogService/find_or_create]: ${err.message}`);
     }
 }
 
 async function get_latest_completion(user_id, book_id){
     try {
-        return (await Log.findOne({
-            where: {user_id: user_id, book_id: book_id},
-            order: [['logged_at', 'DESC']],
-            attributes: ['completion'],
-        })).completion;
+        const response = (await Log.findOne({
+                where: {user_id: user_id, book_id: book_id},
+                order: [['logged_at', 'DESC']],
+                attributes: ['completion'],
+            }));
+        return (response) ? response.completion : null;
     } catch (err) {
-        throw new Error(`[LogService/get_latest_completion]: An error occured with the database: ${err.message}`);
+        throw new Error(`[LogService/get_latest_completion]: ${err.message}`);
     }
 }
 

@@ -28,7 +28,6 @@ function mocked_user(req, res, next) {
         next();
     }).catch(err => {
         var err = new Error('Cannot create or find the user: ', err);
-        err.status = 500
         next(err);
     });
 };
