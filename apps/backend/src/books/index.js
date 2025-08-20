@@ -1,5 +1,7 @@
 const express = require('express');
 const BookService = require('@app/books/service');
+const ErrorFactory = require('@utils/errors');
+const Respond = require('@utils/responses');
 
 const router = express.Router();
 
@@ -10,122 +12,49 @@ router.use(require('@app/auth/middlewares').is_connected);
 router.post('/',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
-    if(!req.body.goodreads_url){
-        res.status(400).json({
-            "success": false,
-            "message": `A goodreads url is needed to create a book`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    if(!req.body.goodreads_url)
+        ErrorFactory.bad_argument(`A goodreads url is needed to create a book`);
 
     const goodreads_url = new URL(req.body.goodreads_url);
 
-    if(!(goodreads_url.host === "www.goodreads.com")){
-        res.status(400).json({
-            "success": false,
-            "message": `The given url in not www.goodreads.com`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    if(!(goodreads_url.host === "www.goodreads.com"))
+        ErrorFactory.bad_argument(`The given url in not www.goodreads.com`);
 
     if(!(goodreads_url.pathname.split("/")[1] === "book" && 
-         goodreads_url.pathname.split("/")[2] === "show")){
-        res.status(400).json({
-            "success": false,
-            "message": `The given url does not have the path /book/show/`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+         goodreads_url.pathname.split("/")[2] === "show"))
+        ErrorFactory.bad_argument(`The given url does not have the path /book/show/`);
 
-    // Get book_name from goodreads
+
+    /* Get book_name from goodreads */
     var book_name = "";
-    try {
-        const response = await fetch(goodreads_url.href);
-        const data = await response.text();
 
-        const $ = require('cheerio').load(data);
-        // Selector written using chrome expect tab
-        book_name = $('#__next > div.PageFrame.PageFrame--siteHeaderBanner > main > div.BookPage__gridContainer > div.BookPage__rightColumn > div.BookPage__mainContent > div.BookPageTitleSection > div.BookPageTitleSection__title > h1').text();
-    } catch (err) {
-        console.error('[post /books/]: Unable to get book_name from url:', err);
-        res.status(500).json({
-            "success": false,
-            "message": "Unable to get book_name from url",
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    const response = await fetch(goodreads_url.href);
+    const data = await response.text();
 
-    if(book_name === ""){
-        res.status(500).json({
-            "success": false,
-            "message": `The mined book name is corrupted`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    const $ = require('cheerio').load(data);
+    // Selector written using chrome expect tab
+    book_name = $('#__next > div.PageFrame.PageFrame--siteHeaderBanner > main > div.BookPage__gridContainer > div.BookPage__rightColumn > div.BookPage__mainContent > div.BookPageTitleSection > div.BookPageTitleSection__title > h1').text();
 
-    try {
-        if(await BookService.does_exist_by_name(book_name)){
-            res.status(400).json({
-                "success": false,
-                "message": `The book ${book_name} already exist`,
-                "data": {},
-                "error_code": null,
-            });
-            return;
-        }
-    
-        const new_book = await BookService.find_or_create(book_name, goodreads_url.href);
 
-        res.status(200).json({
-            "success": true,
-            "message": `See data for the new book informations`,
-            "data": new_book.get(),
-            "error_code": null,
-        });
-    } catch (err) {
-        console.error('[post /books/]: An error occured with the database:', err);
-        res.status(500).json({
-            "success": false,
-            "message": `An error occured with the database`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    if(book_name === "")
+        ErrorFactory.runtime(`The mined book name is corrupted`);
+
+    /* ----- */
+
+    if(await BookService.does_exist_by_name(book_name))
+        ErrorFactory.bad_argument(`The book ${book_name} already exist`);
+
+    const new_book = await BookService.find_or_create(book_name, goodreads_url.href);
+
+    Respond.success(res, `See data for the new book informations`, new_book.get());
 });
 
 router.get('/',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
-    try {
-        const books = await BookService.find_all();
+    const books = await BookService.find_all();
 
-        res.status(200).json({
-            "success": true,
-            "message": `See data for the books list`,
-            "data": books,
-            "error_code": null,
-        });
-    } catch (err) {
-        console.error('[get /books/]: An error occured with the database:', err);
-        res.status(500).json({
-            "success": false,
-            "message": `An error occured with the database`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    Respond.success(res, `See data for the books list`, books);
 });
 
 router.delete('/:book_id',
@@ -133,45 +62,15 @@ router.delete('/:book_id',
 async (req, res) => {
     const { book_id } = req.params;
 
-    if(!book_id){
-        res.status(400).json({
-            "success": false,
-            "message": `The id of the book is missing`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    if(!book_id)
+        ErrorFactory.bad_argument(`The id of the book is missing`);
 
-    try {
-        if(!(await BookService.does_exist_by_id(book_id))){
-            res.status(400).json({
-                "success": false,
-                "message": `The book ${book_id} do not exist`,
-                "data": {},
-                "error_code": null,
-            });
-            return;
-        }
+    if(!(await BookService.does_exist_by_id(book_id)))
+        ErrorFactory.bad_argument(`The book ${book_id} do not exist`);
 
-        await BookService.destroy(book_id);
+    await BookService.destroy(book_id);
 
-        res.status(200).json({
-            "success": true,
-            "message": `The book ${book_id} has been destroy`,
-            "data": {},
-            "error_code": null,
-        });
-    } catch (err) {
-        console.error('[delete /books/:book_id]: An error occured with the database:', err);
-        res.status(500).json({
-            "success": false,
-            "message": `An error occured with the database`,
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    Respond.success(res, `The book ${book_id} has been destroy`, {});
 });
 
 module.exports = router;
