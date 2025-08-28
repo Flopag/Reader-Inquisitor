@@ -7,7 +7,7 @@ function bad_argument(message) {
 }
 
 function runtime(message){
-    var err = new Error(`Runtime error:\n${message}`);
+    var err = new Error(message);
     throw err;
 }
 
@@ -19,7 +19,7 @@ function middleware(err, req, res, next){
         "error_code": (err.status) ? null : next_error_code,
     });
     if(!err.status){
-        console.error(`[${next_error_code}] Internal error:\n${err}`);
+        console.error(`[${next_error_code}] Internal error:\n\n  ${err}\n\n  ${err.stack}\n==========`);
         next_error_code++;
     }
 };
