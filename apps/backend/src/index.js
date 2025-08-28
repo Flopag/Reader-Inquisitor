@@ -43,6 +43,7 @@ app.use('/books', require('@app/books/index'));
 app.use('/logs', require('@app/logs/index'));
 app.use('/transactions', require('@app/transactions/index'));
 app.use('/balances', require('@app/account_balances/index'));
+app.use('/gommettes', require('@app/user_gommettes/index'));
 
 app.use(require('@utils/errors').middleware);
 
