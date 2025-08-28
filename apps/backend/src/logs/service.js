@@ -2,7 +2,7 @@ const Log = require('@models/read_log');
 
 async function find_or_create(user_id, book_id, completion){
     if(completion < 0 || completion > 100)
-        throw new Error(`[LogService/find_or_create]: The completion must be between 0 and 100, given: ${completion}`);
+        throw new Error(`The completion must be between 0 and 100, given: ${completion}`);
 
     await Log.findOrCreate({
         where: {

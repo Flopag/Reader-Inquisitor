@@ -969,6 +969,233 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "transactions",
+			"item": [
+				{
+					"name": "transactions-get",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Empty list of transaction\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": []\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transactions/green_gommette",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transactions",
+								"green_gommette"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transactions-get_sum",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Sum after adding transactions\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": 6\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transactions/sum/green_gommette",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transactions",
+								"sum",
+								"green_gommette"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transactions-make",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let amounts = [\r",
+									"    -3,\r",
+									"    3,\r",
+									"    -3,\r",
+									"    3,\r",
+									"    3,\r",
+									"    -2];\r",
+									"let index = pm.variables.get(\"userIndex\") || 0;\r",
+									"\r",
+									"pm.variables.set(\"amount\", amounts[index]);\r",
+									"\r",
+									"index++;\r",
+									"if (index < amounts.length) {\r",
+									"    pm.variables.set(\"userIndex\", index);\r",
+									"    pm.execution.setNextRequest(pm.execution.location.current);\r",
+									"} else {\r",
+									"    pm.variables.unset(\"userIndex\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"switch(pm.variables.get(\"userIndex\")){\r",
+									"    case 1:\r",
+									"        pm.test(\"Transaction with too much money\", function (){\r",
+									"            pm.response.to.have.status(400);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": false,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    case 2:\r",
+									"        pm.test(\"Add money\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    case 3:\r",
+									"        pm.test(\"Remove all money\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    case 4:\r",
+									"        pm.test(\"Add money\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    case 5:\r",
+									"        pm.test(\"Add money on currently on non zero\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    default:\r",
+									"        pm.test(\"Remove some money\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}},\r\n    \"amount\": {{amount}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transactions/green_gommette",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transactions",
+								"green_gommette"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -1017,6 +1244,11 @@
 		{
 			"key": "completion",
 			"value": "3",
+			"type": "default"
+		},
+		{
+			"key": "amount",
+			"value": "",
 			"type": "default"
 		}
 	]
