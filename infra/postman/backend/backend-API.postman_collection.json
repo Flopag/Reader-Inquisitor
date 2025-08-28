@@ -1032,55 +1032,6 @@
 					"response": []
 				},
 				{
-					"name": "transactions-get_sum",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Sum after adding transactions\", function (){\r",
-									"    pm.response.to.have.status(200);\r",
-									"    pm.response.to.have.jsonBody({\r",
-									"        \"success\": true,\r",
-									"        \"data\": 6\r",
-									"    });\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    {{admin_user}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/transactions/sum/green_gommette",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"transactions",
-								"sum",
-								"green_gommette"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "transactions-make",
 					"event": [
 						{
@@ -1194,14 +1145,107 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "transactions-get_sum",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Sum after adding transactions\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": 6\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transactions/sum/green_gommette",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transactions",
+								"sum",
+								"green_gommette"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "account_balances",
+			"name": "balances",
 			"item": [
 				{
-					"name": "account_balances-get",
+					"name": "balances-update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"update balance\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/balances/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"balances",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "balances-get",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -1267,20 +1311,52 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "gommettes",
+			"item": [
 				{
-					"name": "account_balances-update",
+					"name": "gommettes-add",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"update balance\", function (){\r",
+									"pm.test(\"Add green\", function (){\r",
 									"    pm.response.to.have.status(200);\r",
 									"    pm.response.to.have.jsonBody({\r",
-									"        \"success\": true\r",
+									"        \"success\": true,\r",
+									"        \"data\": {\r",
+									"            \"user_id\": 2,\r",
+									"            \"assigned_date\": \"2025-08-27\",\r",
+									"            \"gommette_color\": \"green\",\r",
+									"            \"gommette_book_id\": 2\r",
+									"        },\r",
 									"    });\r",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let amounts = [0, 0];\r",
+									"let index = pm.variables.get(\"userIndex\") || 0;\r",
+									"\r",
+									"pm.variables.set(\"amount\", amounts[index]);\r",
+									"\r",
+									"index++;\r",
+									"if (index < amounts.length) {\r",
+									"    pm.variables.set(\"userIndex\", index);\r",
+									"    pm.execution.setNextRequest(pm.execution.location.current);\r",
+									"} else {\r",
+									"    pm.variables.unset(\"userIndex\");\r",
+									"}"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1288,7 +1364,84 @@
 						}
 					],
 					"request": {
-						"method": "PATCH",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}},\r\n    \"assigned_date\": \"2025-08-27\",\r\n    \"book_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/gommettes/green",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gommettes",
+								"green"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "gommettes-delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"switch(pm.variables.get(\"userIndex\")){\r",
+									"    case 1:\r",
+									"        pm.test(\"remove second  gommette\", function (){\r",
+									"            pm.response.to.have.status(200);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": true,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"    default:\r",
+									"        pm.test(\"remove suppressed  gommette\", function (){\r",
+									"            pm.response.to.have.status(400);\r",
+									"            pm.response.to.have.jsonBody({\r",
+									"                \"success\": false,\r",
+									"            });\r",
+									"        });\r",
+									"        break;\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let amounts = [0, 0];\r",
+									"let index = pm.variables.get(\"userIndex\") || 0;\r",
+									"\r",
+									"pm.variables.set(\"amount\", amounts[index]);\r",
+									"\r",
+									"index++;\r",
+									"if (index < amounts.length) {\r",
+									"    pm.variables.set(\"userIndex\", index);\r",
+									"    pm.execution.setNextRequest(pm.execution.location.current);\r",
+									"} else {\r",
+									"    pm.variables.unset(\"userIndex\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1300,13 +1453,79 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/balances/update",
+							"raw": "{{url}}/gommettes/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"balances",
-								"update"
+								"gommettes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "gommettes-get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get all gommettes\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": [\r",
+									"            {\r",
+									"                \"gommette_id\": 1,\r",
+									"                \"user_id\": 2,\r",
+									"                \"assigned_date\": \"2025-08-27\",\r",
+									"                \"gommette_color\": \"green\",\r",
+									"                \"gommette_book_id\": 2\r",
+									"            }\r",
+									"        ],\r",
+									"    });\r",
+									"    pm.response.to.not.have.jsonBody({\r",
+									"        \"data\": [\r",
+									"            {\r",
+									"                \"gommette_id\": 2,\r",
+									"                \"user_id\": 2,\r",
+									"                \"assigned_date\": \"2025-08-27\",\r",
+									"                \"gommette_color\": \"green\",\r",
+									"                \"gommette_book_id\": 2\r",
+									"            }\r",
+									"        ],\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/gommettes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gommettes"
 							]
 						}
 					},
