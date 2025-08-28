@@ -2,7 +2,6 @@ const express = require('express');
 const ErrorFactory = require('@utils/errors');
 const Respond = require('@utils/responses');
 const AccountBalanceService = require('@app/account_balances/service');
-const UserService = require('@app/users/service');
 
 const router = express.Router();
 

@@ -30,6 +30,10 @@ module.exports = sequelize.define('Transaction', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  logged_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 }, {
   tableName: 'transactions',
   timestamps: false,

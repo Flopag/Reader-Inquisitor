@@ -29,6 +29,7 @@ async function make_transactions(user_id, account_currency_name, amount){
         user_id: user_id,
         account_currency_name: account_currency_name,
         amount: amount,
+        logged_at: require('sequelize').Sequelize.fn('CURRENT_TIMESTAMP')
     }));
 }
 

@@ -41,7 +41,7 @@ CREATE TABLE user_gommettes (
 CREATE TABLE read_logs (
     read_log_id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
-    logged_at DATETIME NOT NULL,
+    logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     completion TINYINT NOT NULL CHECK (completion<=100),
     book_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (read_log_id),
@@ -59,6 +59,7 @@ CREATE TABLE transactions (
     user_id INT UNSIGNED NOT NULL,
     account_currency_name VARCHAR(32) NOT NULL,
     amount INT NOT NULL,
+    logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (transaction_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (account_currency_name) REFERENCES currencies(currency_name) ON DELETE CASCADE
