@@ -9,6 +9,7 @@ const router = express.Router();
 if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
+router.use(require('@app/auth/middlewares').usurpate);
 
 router.get("/:currency_name",
     require('@app/auth/middlewares').at_least_basic,
