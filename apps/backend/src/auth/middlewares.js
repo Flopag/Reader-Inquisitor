@@ -1,4 +1,3 @@
-const User = require('@models/user');
 const UserService = require('@app/users/service');
 
 function is_connected(req, res, next) {
@@ -18,7 +17,7 @@ function mocked_user(req, res, next) {
         next(err);
         return;
     }
-    User.findOrCreate({
+    require('@models/user').findOrCreate({
     where: {
         discord_id: req.body.user.discord_id},
         defaults: {
@@ -33,7 +32,7 @@ function mocked_user(req, res, next) {
 };
 
 function usurpate(req, res, next) {
-    if(!req.body.usurpation){
+    if(!req.body?.usurpation){
         next();
         return;
     }

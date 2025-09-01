@@ -25,9 +25,19 @@ async function get_users_with_url(){
     }});
 }
 
+async function find_or_create_user_by_discord_id(discord_id){
+    return await User.findOrCreate({
+            where: {discord_id: discord_id},
+            defaults: {
+                role_name: "Basic",
+            },
+        })
+}
+
 module.exports = {
     does_user_exists,
     get_user,
     set_user_url,
     get_users_with_url,
+    find_or_create_user_by_discord_id,
 };
