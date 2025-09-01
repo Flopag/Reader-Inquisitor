@@ -91,13 +91,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/me",
+							"raw": "{{url}}/users",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"auth",
-								"me"
+								"users"
 							]
 						}
 					},
@@ -159,12 +158,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/can_i_basic",
+							"raw": "{{url}}/users/can_i_basic",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"auth",
+								"users",
 								"can_i_basic"
 							]
 						}
@@ -236,12 +235,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/can_i_admin",
+							"raw": "{{url}}/users/can_i_admin",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"auth",
+								"users",
 								"can_i_admin"
 							]
 						}
@@ -313,12 +312,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/can_i_maintainer",
+							"raw": "{{url}}/users/can_i_maintainer",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"auth",
+								"users",
 								"can_i_maintainer"
 							]
 						}
@@ -1526,6 +1525,249 @@
 							],
 							"path": [
 								"gommettes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "users-me",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get me\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": {\r",
+									"            \"user_id\": 2,\r",
+									"            \"discord_id\": 1,\r",
+									"            \"role_name\": \"Basic\",\r",
+									"            \"user_url\": null\r",
+									"        },\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{basic_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users-update_url",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"add url\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": {\r",
+									"            \"user_id\": 2,\r",
+									"            \"discord_id\": 1,\r",
+									"            \"role_name\": \"Basic\",\r",
+									"            \"user_url\": \"https://www.goodreads.com/user/show/184697905-flopag\"\r",
+									"        },\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{basic_user}},\r\n    \"user_url\": \"https://www.goodreads.com/user/show/184697905-flopag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users-get_active",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"see all active users\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"        \"data\": [\r",
+									"            {\r",
+									"                \"user_id\": 2,\r",
+									"                \"discord_id\": 1,\r",
+									"                \"role_name\": \"Basic\",\r",
+									"                \"user_url\": \"https://www.goodreads.com/user/show/184697905-flopag\"\r",
+									"            }\r",
+									"        ],\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/active",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users-usurpate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.variables.get(\"maintainer_user\") === pm.variables.get(\"current_user\") || pm.variables.get(\"admin_user\") === pm.variables.get(\"current_user\"))\r",
+									"    pm.test(\"user can usurpate\", function (){\r",
+									"        pm.response.to.have.status(200);\r",
+									"        pm.response.to.have.jsonBody({\r",
+									"            \"success\": true,\r",
+									"            \"data\": {\r",
+									"                \"user_id\": 2,\r",
+									"                \"discord_id\": 1,\r",
+									"                \"role_name\": \"Basic\",\r",
+									"                \"user_url\": \"https://www.goodreads.com/user/show/184697905-flopag\"\r",
+									"            }\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"else\r",
+									"    pm.test(\"User cannot usurpate\", function (){\r",
+									"        pm.response.to.have.status(401);\r",
+									"        pm.response.to.have.jsonBody({\r",
+									"            \"success\": false,\r",
+									"        });\r",
+									"    });"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let users = [\"basic_user\", \"admin_user\", \"maintainer_user\"];\r",
+									"let index = pm.variables.get(\"userIndex\") || 0;\r",
+									"\r",
+									"pm.variables.set(\"current_user\", pm.variables.get(users[index]));\r",
+									"\r",
+									"index++;\r",
+									"if (index < users.length) {\r",
+									"    pm.variables.set(\"userIndex\", index);\r",
+									"    pm.execution.setNextRequest(pm.execution.location.current);\r",
+									"} else {\r",
+									"    pm.variables.unset(\"userIndex\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{current_user}},\r\n    \"usurpation\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
 							]
 						}
 					},
