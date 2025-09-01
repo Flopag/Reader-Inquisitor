@@ -9,6 +9,7 @@ const router = express.Router();
 if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
+router.use(require('@app/auth/middlewares').usurpate);
 
 router.get("/:currency_name",
     require('@app/auth/middlewares').at_least_basic,
@@ -45,7 +46,7 @@ async (req, res) => {
 router.post("/:currency_name",
     require('@app/auth/middlewares').at_least_admin,
 async (req, res) => {
-    if(!req.body.amount)
+    if(!req.body?.amount)
             ErrorFactory.bad_argument(`An amount and a currency are needed to create a book`);
     
     const { currency_name } = req.params;

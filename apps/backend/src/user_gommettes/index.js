@@ -10,6 +10,7 @@ const router = express.Router();
 if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
+router.use(require('@app/auth/middlewares').usurpate);
 
 router.get('/',
     require('@app/auth/middlewares').at_least_basic,
@@ -23,7 +24,7 @@ router.post('/:gommette_color',
     require('@app/auth/middlewares').at_least_admin,
 async (req, res) => {
     const { gommette_color } = req.params;
-    const { assigned_date, book_id } = req.body;
+    const { assigned_date, book_id } = req.body || {};
 
     if(!gommette_color)
         ErrorFactory.bad_argument(`A gommette color must be provided`);

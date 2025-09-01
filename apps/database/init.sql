@@ -10,6 +10,7 @@ CREATE TABLE users (
     user_id INT UNSIGNED AUTO_INCREMENT,
     discord_id BIGINT UNSIGNED NOT NULL UNIQUE,
     role_name VARCHAR(16),
+    user_url VARCHAR(2048) DEFAULT NULL,
     PRIMARY KEY (user_id),
     FOREIGN KEY (role_name) REFERENCES roles(role_name) ON DELETE SET NULL
 );
