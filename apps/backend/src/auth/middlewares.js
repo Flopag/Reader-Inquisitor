@@ -57,20 +57,14 @@ function usurpate(req, res, next) {
         if(!does_exists){
             var err = new Error(`The given user with id ${req.body.usurpation} does not exists`);
             err.status = 400
-            next(err);
-            return;
+            throw err;
         }
-    }).catch(err => {
-        next(err);
-    });
-
-    UserService.get_user(req.body.usurpation
-    ).then((user) => {
+        return UserService.get_user(req.body.usurpation);
+    }).then((user) => {
         if(user.role_name === "Admin" || user.role_name === "Maintainer"){
             var err = new Error('An authorized user cannot usurpate another authorized user');
             err.status = 401
-            next(err);
-            return;
+            throw err;
         }
         req.user = user;
         next();
