@@ -29,41 +29,23 @@ app.listen(port, () => {
 })
 
 app.get('/', (req, res) => {
-    res.redirect('/auth/me');
+    res.redirect('/users');
 });
 
 app.get('/health', async (req, res) => {
-    try {
-        await sequelize.authenticate();
-    } catch (error) {
-        console.error('[health]: Unable to connect to the database:', error);
-        res.status(500).json({
-            "success": false,
-            "message": "Unable to connect to the database",
-            "data": {},
-            "error_code": null,
-        });
-        return;
-    }
+    await sequelize.authenticate();
 
-    res.status(200).json({
-        "success": true,
-        "message": "The API is healthy",
-        "data": {},
-        "error_code": null,
-    });
+    require('@utils/responses').success(res, `The API is healthy`, {});
 });
 
 app.use('/auth', require('@app/auth/index'));
 app.use('/books', require('@app/books/index'));
+app.use('/logs', require('@app/logs/index'));
+app.use('/transactions', require('@app/transactions/index'));
+app.use('/balances', require('@app/account_balances/index'));
+app.use('/gommettes', require('@app/user_gommettes/index'));
+app.use('/users', require('@app/users/index'));
 
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        "success": false,
-        "message": err.message,
-        "data": {},
-        "error_code": null,
-    });
-});
+app.use(require('@utils/errors').middleware);
 
 module.exports = app;

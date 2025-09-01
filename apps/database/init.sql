@@ -10,6 +10,7 @@ CREATE TABLE users (
     user_id INT UNSIGNED AUTO_INCREMENT,
     discord_id BIGINT UNSIGNED NOT NULL UNIQUE,
     role_name VARCHAR(16),
+    user_url VARCHAR(2048) DEFAULT NULL,
     PRIMARY KEY (user_id),
     FOREIGN KEY (role_name) REFERENCES roles(role_name) ON DELETE SET NULL
 );
@@ -39,11 +40,12 @@ CREATE TABLE user_gommettes (
 );
 
 CREATE TABLE read_logs (
+    read_log_id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
-    logged_at DATETIME NOT NULL,
+    logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     completion TINYINT NOT NULL CHECK (completion<=100),
     book_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (user_id, logged_at),
+    PRIMARY KEY (read_log_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
 );
@@ -51,6 +53,17 @@ CREATE TABLE read_logs (
 CREATE TABLE currencies (
     currency_name VARCHAR(32) NOT NULL,
     PRIMARY KEY (currency_name)
+);
+
+CREATE TABLE transactions (
+    transaction_id INT UNSIGNED AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    account_currency_name VARCHAR(32) NOT NULL,
+    amount INT NOT NULL,
+    logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (transaction_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (account_currency_name) REFERENCES currencies(currency_name) ON DELETE CASCADE
 );
 
 CREATE TABLE account_balances (
@@ -85,3 +98,5 @@ CREATE TABLE user_items (
 );
 
 INSERT INTO roles (role_name) VALUES ('Admin'), ('Maintainer'), ('Basic'), ('Bot');
+INSERT INTO gommette_colors (color) VALUES ('Red'), ('Green');
+INSERT INTO currencies (currency_name) VALUES ('green_gommette'), ('red_gommette');

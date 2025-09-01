@@ -1,4 +1,4 @@
-const User = require('@models/user');
+const UserService = require('@app/users/service');
 
 function is_connected(req, res, next) {
     if (!req.user){
@@ -12,12 +12,12 @@ function is_connected(req, res, next) {
 
 function mocked_user(req, res, next) {
     if(!req.body || !req.body.user || !req.body.user.discord_id){
-        var err = new Error('no body, body.user,  or body.user.discord_id in the request');
-        err.status = 400
+        var err = new Error(`no body, body.user,  or body.user.discord_id in the request`);
+        err.status = 400;
         next(err);
         return;
     }
-    User.findOrCreate({
+    require('@models/user').findOrCreate({
     where: {
         discord_id: req.body.user.discord_id},
         defaults: {
@@ -27,8 +27,47 @@ function mocked_user(req, res, next) {
         req.user = user;
         next();
     }).catch(err => {
-        var err = new Error('Cannot create or find the user: ', err);
-        err.status = 500
+        next(err);
+    });
+};
+
+function usurpate(req, res, next) {
+    if(!req.body?.usurpation){
+        next();
+        return;
+    }
+
+    if(!req.user || !req.user.role_name){
+        var err = new Error('no user or user.role_name in the request');
+        err.status = 400
+        next(err);
+        return;
+    }
+
+    if(!(req.user.role_name === "Admin" || req.user.role_name === "Maintainer")){
+        var err = new Error('user is not authorized: must be at least Admin');
+        err.status = 401
+        next(err);
+        return;
+    }
+
+    UserService.does_user_exists(req.body.usurpation
+    ).then((does_exists) => {
+        if(!does_exists){
+            var err = new Error(`The given user with id ${req.body.usurpation} does not exists`);
+            err.status = 400
+            throw err;
+        }
+        return UserService.get_user(req.body.usurpation);
+    }).then((user) => {
+        if(user.role_name === "Admin" || user.role_name === "Maintainer"){
+            var err = new Error('An authorized user cannot usurpate another authorized user');
+            err.status = 401
+            throw err;
+        }
+        req.user = user;
+        next();
+    }).catch(err => {
         next(err);
     });
 };
@@ -87,6 +126,7 @@ function at_least_maintainer(req, res, next) {
 module.exports = {
     mocked_user,
     is_connected,
+    usurpate,
     at_least_basic,
     at_least_admin,
     at_least_maintainer,

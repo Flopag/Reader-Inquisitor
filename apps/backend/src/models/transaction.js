@@ -2,8 +2,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = require('@utils/mysql_connection');
 
-module.exports = sequelize.define('ReadLog', {
-  read_log_id: {
+module.exports = sequelize.define('Transaction', {
+  transaction_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     autoIncrement: true,
     primaryKey: true,
@@ -17,28 +17,24 @@ module.exports = sequelize.define('ReadLog', {
     },
     onDelete: 'CASCADE',
   },
+  account_currency_name: {
+    type: DataTypes.STRING(32),
+    allowNull: false,
+    references: {
+      model: 'currencies',
+      key: 'currency_name',
+    },
+    onDelete: 'CASCADE',
+  },
+  amount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   logged_at: {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  completion: {
-    type: DataTypes.TINYINT,
-    allowNull: false,
-    validate: {
-      max: 100,
-      min: 0,
-    },
-  },
-  book_id: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: false,
-    references: {
-      model: 'books',
-      key: 'book_id',
-    },
-    onDelete: 'CASCADE',
-  },
 }, {
-  tableName: 'read_logs',
+  tableName: 'transactions',
   timestamps: false,
 });
