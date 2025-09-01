@@ -24,7 +24,7 @@ router.post('/:gommette_color',
     require('@app/auth/middlewares').at_least_admin,
 async (req, res) => {
     const { gommette_color } = req.params;
-    const { assigned_date, book_id } = req.body;
+    const { assigned_date, book_id } = req.body || {};
 
     if(!gommette_color)
         ErrorFactory.bad_argument(`A gommette color must be provided`);

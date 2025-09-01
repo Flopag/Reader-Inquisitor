@@ -14,7 +14,7 @@ router.use(require('@app/auth/middlewares').usurpate);
 router.post('/',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
-    if(!req.body.book_id || !req.body.completion)
+    if(!req.body?.book_id || !req.body?.completion)
         ErrorFactory.bad_argument(`A book id and a completion is needed, given: ${req.body}`);
 
     if(req.body.completion < 0 || req.body.completion > 100)

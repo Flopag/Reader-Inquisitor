@@ -13,7 +13,7 @@ router.use(require('@app/auth/middlewares').usurpate);
 router.post('/',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
-    if(!req.body.goodreads_url)
+    if(!req.body?.goodreads_url)
         ErrorFactory.bad_argument(`A goodreads url is needed to create a book`);
 
     const goodreads_url = new URL(req.body.goodreads_url);
