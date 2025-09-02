@@ -6,6 +6,7 @@ var session = require('express-session')
 
 const app = express()
 const port = process.env.PORT
+const backdoor_port = process.env.BACKDOOR_PORT
 
 /* middleware configuration */
 
@@ -26,6 +27,10 @@ app.use(express.json());
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
+})
+
+app.listen(backdoor_port, () => {
+    console.log(`App listening on port ${backdoor_port}`)
 })
 
 app.get('/', (req, res) => {

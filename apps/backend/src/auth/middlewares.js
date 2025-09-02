@@ -123,6 +123,16 @@ function at_least_maintainer(req, res, next) {
     }
 };
 
+function on_backdoor(req, res, next) {
+    if(req.socket.localPort == process.env.BACKDOOR_PORT && req.query.pass === process.env.POWER_USER_PASS)
+        next();
+    else{
+        var err = new Error('You are not authorized');
+        err.status = 401
+        next(err);
+    }
+};
+
 module.exports = {
     mocked_user,
     is_connected,
@@ -130,4 +140,5 @@ module.exports = {
     at_least_basic,
     at_least_admin,
     at_least_maintainer,
+    on_backdoor,
 };
