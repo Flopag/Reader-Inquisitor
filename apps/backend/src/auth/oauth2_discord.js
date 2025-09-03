@@ -33,7 +33,7 @@ passport.use('power_user', new CustomStrategy(
         return done(err);
     }
 
-    UserService.find_or_create_user_by_discord_id(
+    UserService.find_or_create_bot_by_discord_id(
         0
     ).then(([user, created]) => {
         return done(null, user)

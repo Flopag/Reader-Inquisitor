@@ -44,7 +44,7 @@ function usurpate(req, res, next) {
         return;
     }
 
-    if(!(req.user.role_name === "Admin" || req.user.role_name === "Maintainer")){
+    if(!(req.user.role_name === "Bot" || req.user.role_name === "Admin" || req.user.role_name === "Maintainer")){
         var err = new Error('user is not authorized: must be at least Admin');
         err.status = 401
         next(err);
@@ -60,12 +60,16 @@ function usurpate(req, res, next) {
         }
         return UserService.get_user(req.body.usurpation);
     }).then((user) => {
-        if(user.role_name === "Admin" || user.role_name === "Maintainer"){
+        if( ((! (req.user.role_name === "Bot" || req.user.role_name === "Maintainer")) && 
+            (user.role_name === "Admin" || user.role_name === "Maintainer" || user.role_name === "Bot")) 
+            || user.role_name === "Maintainer"){
             var err = new Error('An authorized user cannot usurpate another authorized user');
             err.status = 401
             throw err;
         }
+        const aux = req.user;
         req.user = user;
+        req.user.role_name = aux.role_name;
         next();
     }).catch(err => {
         next(err);
@@ -80,7 +84,7 @@ function at_least_basic(req, res, next) {
         return;
     }
 
-    if(req.user.role_name === "Basic" || req.user.role_name === "Admin" || req.user.role_name === "Maintainer")
+    if(req.user.role_name === "Bot" || req.user.role_name === "Basic" || req.user.role_name === "Admin" || req.user.role_name === "Maintainer")
         next()
     else{
         var err = new Error('user is not authorized: must be at least Basic');
@@ -97,7 +101,7 @@ function at_least_admin(req, res, next) {
         return;
     }
 
-    if(req.user.role_name === "Admin" || req.user.role_name === "Maintainer")
+    if(req.user.role_name === "Bot" || req.user.role_name === "Admin" || req.user.role_name === "Maintainer")
         next()
     else{
         var err = new Error('user is not authorized: must be at least Admin');
