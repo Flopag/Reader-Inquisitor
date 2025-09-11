@@ -8,6 +8,7 @@ services:
       - backend.env
     ports:
       - 3000:3000
+      - 4000:4000
     command: npm run start
     healthcheck:
       test: ["CMD-SHELL", "./healthcheck.sh"]

@@ -5,10 +5,11 @@ var passport = require('passport');
 var DiscordStrategy = require('passport-discord').Strategy;
 var User = require('@models/user');
 const UserService = require('@app/users/service');
+const CustomStrategy = require('passport-custom').Strategy;
 
 var scopes = ['identify'];
 
-passport.use(new DiscordStrategy({
+passport.use('discord', new DiscordStrategy({
     clientID: process.env.DISCORD_ID,
     clientSecret: process.env.DISCORD_SECRET,
     callbackURL: process.env.DISCORD_CALLBACK_URL,
@@ -21,6 +22,23 @@ function(accessToken, refreshToken, profile, cb) {
         return cb(null, user)
     }).catch(err => {
         return cb(err, null);
+    });
+}));
+
+passport.use('power_user', new CustomStrategy(
+(req, done) => {
+    if(!req.query.pass === process.env.POWER_USER_PASS){
+        var err = new Error('You are not authorized');
+        err.status = 401
+        return done(err);
+    }
+
+    UserService.find_or_create_bot_by_discord_id(
+        0
+    ).then(([user, created]) => {
+        return done(null, user)
+    }).catch(err => {
+        return done(err);
     });
 }));
 
