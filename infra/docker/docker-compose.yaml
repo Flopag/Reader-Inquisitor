@@ -24,6 +24,8 @@ services:
     ports:
       - 1234:1234
     command: npm run start
+    env_file:
+      - frontend.env
     healthcheck:
       test: ["CMD-SHELL", "./healthcheck.sh"]
       interval: 1m30s

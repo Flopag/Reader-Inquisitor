@@ -15,8 +15,14 @@
   "bugs": {
     "url": "https://github.com/Flopag/Reader-Inquisitor/issues"
   },
+  "alias": {
+    "@components/*": "./src/components/$1",
+    "@widgets/*": "./src/components/widgets/$1",
+    "@root/*": "./src/$1"
+  },
   "homepage": "https://github.com/Flopag/Reader-Inquisitor#readme",
   "dependencies": {
+    "axios": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
