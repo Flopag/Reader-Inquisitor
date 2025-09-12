@@ -18,7 +18,7 @@ function(req, res) {
 router.get('/discord/callback', passport.authenticate('discord', {
     failureRedirect: '/'
 }), function(req, res) {
-    res.redirect('/');
+    res.redirect(process.env.FRONTEND_URL);
 });
 
 if(process.env.IS_TESTING)
