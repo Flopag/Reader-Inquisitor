@@ -24,8 +24,11 @@
   "homepage": "https://github.com/Flopag/Reader-Inquisitor#readme",
   "dependencies": {
     "axios": "^1.11.0",
+    "buffer": "^6.0.3",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router": "^7.9.1",
+    "react-router-dom": "^6.6.2"
   },
   "devDependencies": {
     "jest": "^30.0.5",
