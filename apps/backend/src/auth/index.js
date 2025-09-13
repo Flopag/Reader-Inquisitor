@@ -25,4 +25,8 @@ if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
 
+router.get('/logout', function(req, res) {
+    req.session.destroy();
+});
+
 module.exports = router;

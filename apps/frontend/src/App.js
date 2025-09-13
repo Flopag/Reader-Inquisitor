@@ -1,7 +1,8 @@
 import Login from '@components/login.js';
+import Profile_page from '@pages/profile'
 
 export function App() {
     return  <>
-                <Login child={<h1>Hello world! (ho, this is an update, V2)</h1>} />
+                <Login child={<Profile_page />} />
             </>;
 }

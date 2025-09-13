@@ -18,6 +18,7 @@
   "alias": {
     "@components/*": "./src/components/$1",
     "@widgets/*": "./src/components/widgets/$1",
+    "@pages/*": "./src/pages/$1",
     "@root/*": "./src/$1"
   },
   "homepage": "https://github.com/Flopag/Reader-Inquisitor#readme",
