@@ -1,0 +1,35 @@
+.Calendar-cell-true, .Calendar-cell-false, .Calendar-label-cell{
+    width: 50px;
+    height: 50px;
+}
+
+.Calendar-cell-true {
+    border: 1px solid black;
+}
+
+.Calendar-cell-false {
+    padding: 1px;
+    background-color: black;
+}
+
+.Calendar-label-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+    padding: 1px;
+    padding-bottom: 0px;
+}
+
+#Calendar {
+    display: flex;
+    flex-direction: column;
+    border: 5px solid black;
+    height: fit-content;
+    width: fit-content;
+}
+
+.Calendar-row {
+    display: flex;
+    flex-direction: row;
+}
