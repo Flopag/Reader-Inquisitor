@@ -74,7 +74,12 @@ function login ({ child }) {
     else if(!is_connected)
         return  <div id="Login">
                     <h1>Choose how to connect</h1>
-                    <Button message={"Discord"} on_click={() => {window.location.href = `${process.env.API_PROTOCOL}://${process.env.API_URL}/auth/discord`}} />
+                    <Button 
+                        message={"Discord"} 
+                        on_click={() => {window.location.href = `${process.env.API_PROTOCOL}://${process.env.API_URL}/auth/discord`}} 
+                        background_color={"#5662f6"}
+                        color={"beige"}
+                    />
                 </div>;
     else
         return  <>
