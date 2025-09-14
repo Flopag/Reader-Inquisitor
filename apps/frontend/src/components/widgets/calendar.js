@@ -10,10 +10,14 @@ class Calendar extends React.Component {
             year: today.getFullYear(),
             month: today.getMonth() + 1,
             content_array: props.content,
+            current_date: today
         };
     }
 
     date_to_string(date){
+        if(!date)
+            return "";
+        
         return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
     }
 
@@ -70,21 +74,40 @@ class Calendar extends React.Component {
 
         return this.content_map[key]
     }
+
+    change_current_date(new_current_date){
+        this.setState((previous_state) => {
+            let { current_date } = previous_state; 
+
+            current_date = new_current_date;
+
+            return { current_date };
+        });
+    }
     
     get_calendar_row_html(i){
-        const { month } = this.state;
+        const { month, current_date } = this.state;
         const cells = [];
         const today_ij = this.date_to_ij(new Date());
         
         for(let j=0; j < 7; ++j){
-            const current_date = this.ij_to_date(i,j)
-            const element = this.get_in_content_map(current_date);
-            const is_active = (current_date?.getMonth() == month-1);
+            const aux_current_date = this.ij_to_date(i,j)
+            const element = this.get_in_content_map(aux_current_date);
+            const is_active = (aux_current_date?.getMonth() == month-1);
+
+            const change_current_day = () => {
+                    if(is_active)
+                        this.change_current_date(aux_current_date);
+                };
+
             cells.push(<div 
                 key={j} 
-                className={`Calendar-cell-${is_active} today-${j==today_ij[1] && i==today_ij[0]}`} 
-                id={`calendar-cell-${j}`}>{(element && is_active) ? element[0] : ""}
-            </div>)
+                className={`Calendar-cell-${is_active} today-${j==today_ij[1] && i==today_ij[0]} currentdate-${this.date_to_string(current_date) == this.date_to_string(aux_current_date)}`} 
+                id={`calendar-cell-${j}`}
+                onClick={change_current_day}
+                >
+                    {(element && is_active) ? element[0] : ""}
+                </div>)
         }
 
         return cells;
@@ -138,7 +161,9 @@ class Calendar extends React.Component {
     render(){
         this.fill_content_map();
 
-        const { year, month } = this.state;
+        const { year, month, current_date } = this.state;
+
+        const page_content = this.get_in_content_map(current_date)
 
         const to_previous_month = () => {
             this.to_previous_month();
@@ -148,22 +173,30 @@ class Calendar extends React.Component {
             this.to_next_month();
         };
 
-        return  <div id="Calendar">
-                    <div className='Calendar-headers'>
-                        <div className={`Calendar-label-cell`} onClick={to_previous_month} style={{cursor: "pointer"}}>prev</div>
-                        <div id="Calendar-title">{month}/{year}</div>
-                        <div className={`Calendar-label-cell`} onClick={to_next_month} style={{cursor: "pointer"}}>Next</div>
+        return  <div id="Calendar-widget">
+                    <div id="Calendar">
+                        <div className='Calendar-headers'>
+                            <div className={`Calendar-label-cell`} onClick={to_previous_month} style={{cursor: "pointer"}}>prev</div>
+                            <div id="Calendar-title">{month}/{year}</div>
+                            <div className={`Calendar-label-cell`} onClick={to_next_month} style={{cursor: "pointer"}}>Next</div>
+                        </div>
+                        <div className='Calendar-row'>
+                            <div className={`Calendar-label-cell`}>Su</div>
+                            <div className={`Calendar-label-cell`}>Mo</div>
+                            <div className={`Calendar-label-cell`}>Tu</div>
+                            <div className={`Calendar-label-cell`}>We</div>
+                            <div className={`Calendar-label-cell`}>Th</div>
+                            <div className={`Calendar-label-cell`}>Fr</div>
+                            <div className={`Calendar-label-cell`}>Sa</div>
+                        </div>
+                        {this.get_calendar_html(year, month)}
                     </div>
-                    <div className='Calendar-row'>
-                        <div className={`Calendar-label-cell`}>Su</div>
-                        <div className={`Calendar-label-cell`}>Mo</div>
-                        <div className={`Calendar-label-cell`}>Tu</div>
-                        <div className={`Calendar-label-cell`}>We</div>
-                        <div className={`Calendar-label-cell`}>Th</div>
-                        <div className={`Calendar-label-cell`}>Fr</div>
-                        <div className={`Calendar-label-cell`}>Sa</div>
+                    <div id="Calendar-page">
+                        <h1>{this.date_to_string(current_date)}</h1>
+                        <div id="Calendar-page-content">
+                            {(page_content) ? this.get_in_content_map(current_date)[1] : ""}
+                        </div>
                     </div>
-                    {this.get_calendar_html(year, month)}
                 </div>
     }
 }

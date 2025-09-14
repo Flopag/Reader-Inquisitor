@@ -29,6 +29,18 @@
     margin: 5px;
 }
 
+.Calendar-cell-true.currentdate-true {
+    width: 46px;
+    height: 46px;
+    border: 3px solid #f66956;
+}
+
+.Calendar-cell-true.currentdate-true:hover {
+    width: 36px;
+    height: 36px;
+    margin: 5px;
+}
+
 .Calendar-cell-false {
     padding: 1px;
     background-color: black;
@@ -41,6 +53,11 @@
     border-bottom: 1px solid black;
     padding: 1px;
     padding-bottom: 0px;
+}
+
+#Calendar-widget {
+    display: flex;
+    flex-direction: column;
 }
 
 #Calendar {
