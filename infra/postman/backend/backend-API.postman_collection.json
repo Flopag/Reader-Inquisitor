@@ -753,7 +753,7 @@
 					"response": []
 				},
 				{
-					"name": "logs-list_all",
+					"name": "logs-list_all_by_book",
 					"event": [
 						{
 							"listen": "test",

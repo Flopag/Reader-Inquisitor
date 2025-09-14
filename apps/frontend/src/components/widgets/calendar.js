@@ -5,11 +5,10 @@ class Calendar extends React.Component {
     constructor(props) {
         super(props);
         const today = new Date();
-        content_map: null
+        let content_map = null
         this.state = {
             year: today.getFullYear(),
             month: today.getMonth() + 1,
-            content_array: props.content,
             current_date: today
         };
     }
@@ -17,7 +16,7 @@ class Calendar extends React.Component {
     date_to_string(date){
         if(!date)
             return "";
-        
+
         return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
     }
 
@@ -50,9 +49,7 @@ class Calendar extends React.Component {
         return new Date(year, month-1, dd);
     }
 
-    fill_content_map(){
-        const { content_array } = this.state;
-
+    fill_content_map(content_array){
         if(!content_array)
             return;
 
@@ -159,7 +156,9 @@ class Calendar extends React.Component {
     }
 
     render(){
-        this.fill_content_map();
+        const { content } = this.props;
+
+        this.fill_content_map(content);
 
         const { year, month, current_date } = this.state;
 
