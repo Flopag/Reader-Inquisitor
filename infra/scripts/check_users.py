@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime, timezone, timedelta
 
 fooling_goodreads_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -63,7 +64,7 @@ for user in active_users:
 
 print("> " + str(new_logs))
 
-print("Updating the database...")
+print("Transfering all goodreads log into ours...")
 
 req = session.get(url + "/books").json()
 
@@ -76,7 +77,6 @@ books = req["data"]
 for new_log in new_logs:
     user_id = new_log[0]
     user_logs = new_log[1]
-    has_read = False
 
     for user_log in user_logs:
         completion = user_log[0]
@@ -103,14 +103,31 @@ for new_log in new_logs:
             "completion": completion,
             "usurpation": user_id
             }).json()
-        
-        if(res["success"]):
-            has_read = True
 
-    if(has_read):
-        print("> Green gommette attributed to " + str(user_id))
-        session.post(url + "/gommettes/green", json={"usurpation": user_id}).json()
+print("Verifing all user logs...")  
+
+all_users = session.get(url + "/users/all").json()["data"]
+
+if(not active_users):
+    print("> Cannot get all users")
+    exit(1)
+
+for user in all_users:
+    last_log = session.get(url + "/logs/last", json={
+            "usurpation": user["user_id"]
+            }).json()["data"]
+    
+    logged_at = None
+    if(last_log):
+        logged_at = datetime.fromisoformat(last_log['logged_at'].replace("Z", "+00:00"))
+        now = datetime.now(timezone.utc)
+
+    if(logged_at and now - logged_at < timedelta(hours=25)):
+        print("> Green gommette attributed to " + str(user["user_id"]))
+        session.post(url + "/gommettes/green", json={"usurpation": user["user_id"], "book_id": last_log["book_id"]}).json()
     else:
-        print("> Red gommette attributed to " + str(user_id))
-        session.post(url + "/gommettes/red", json={"usurpation": user_id}).json()
+        print("> Red gommette attributed to " + str(user["user_id"]))
+        session.post(url + "/gommettes/red", json={"usurpation": user["user_id"]}).json()
+    
+    session.patch(url + "/balances/update", json={"usurpation": user["user_id"]}).json()
 

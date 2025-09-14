@@ -3,6 +3,7 @@ require('module-alias/register');
 const express = require('express')
 const sequelize = require('@utils/mysql_connection');
 var session = require('express-session')
+const cors = require('cors');
 
 const app = express()
 const port = process.env.PORT
@@ -19,6 +20,7 @@ app.use(session({
     cookie: { secure: false } // To set to true if https
 }));
 
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(require('@app/auth/oauth2_discord').initialize());
 app.use(require('@app/auth/oauth2_discord').session());
 app.use(express.json());

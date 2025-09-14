@@ -1,0 +1,84 @@
+.Calendar-cell-true, .Calendar-cell-false, .Calendar-label-cell{
+    width: 50px;
+    height: 50px;
+}
+
+.Calendar-cell-true {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Calendar-cell-true:hover {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.Calendar-cell-true.today-true {
+    width: 46px;
+    height: 46px;
+    border: 3px solid #5662f6;
+}
+
+.Calendar-cell-true.today-true:hover {
+    width: 36px;
+    height: 36px;
+    margin: 5px;
+}
+
+.Calendar-cell-true.currentdate-true {
+    width: 46px;
+    height: 46px;
+    border: 3px solid #f66956;
+}
+
+.Calendar-cell-true.currentdate-true:hover {
+    width: 36px;
+    height: 36px;
+    margin: 5px;
+}
+
+.Calendar-cell-false {
+    padding: 1px;
+    background-color: black;
+}
+
+.Calendar-label-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+    padding: 1px;
+    padding-bottom: 0px;
+}
+
+#Calendar-widget {
+    display: flex;
+    flex-direction: column;
+}
+
+#Calendar {
+    display: flex;
+    flex-direction: column;
+    border: 5px solid black;
+    height: fit-content;
+    width: fit-content;
+}
+
+#Calendar-title {
+    width: calc(52px * 5);
+    height: 50px;
+    padding-top: 1px;
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Calendar-row, .Calendar-headers {
+    display: flex;
+    flex-direction: row;
+}

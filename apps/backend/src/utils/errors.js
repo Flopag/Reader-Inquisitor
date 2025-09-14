@@ -12,13 +12,14 @@ function runtime(message){
 }
 
 function middleware(err, req, res, next){
+    const must_hide = !err.status || err.status == 500;
     res.status(err.status || 500).json({
         "success": false,
-        "message": (err.status) ? err.message : "Internal Error",
+        "message": (!must_hide) ? err.message : "Internal Error",
         "data": {},
-        "error_code": (err.status) ? null : next_error_code,
+        "error_code": (!must_hide) ? null : next_error_code,
     });
-    if(!err.status){
+    if(!err.status || err.status == 500){
         console.error(`[${next_error_code}] Internal error:\n\n  ${err}\n\n  ${err.stack}\n==========`);
         next_error_code++;
     }

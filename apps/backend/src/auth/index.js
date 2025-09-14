@@ -16,13 +16,17 @@ function(req, res) {
 });
 
 router.get('/discord/callback', passport.authenticate('discord', {
-    failureRedirect: '/'
+    failureRedirect: process.env.FRONTEND_URL
 }), function(req, res) {
-    res.redirect('/');
+    res.redirect(process.env.FRONTEND_URL);
 });
 
 if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
+
+router.get('/logout', function(req, res) {
+    req.session.destroy();
+});
 
 module.exports = router;

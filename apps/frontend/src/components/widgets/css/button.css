@@ -1,0 +1,32 @@
+.button {
+    margin-top: 2;
+    margin-bottom: 2;
+    margin-left: 10;
+    margin-right: 10;
+    width: 100px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover {
+    cursor: pointer;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    width: 120px;
+    height: 54px;
+}
+
+.button:active {
+    cursor: pointer;
+    margin-top: 4;
+    margin-bottom: 4;
+    margin-left: 20;
+    margin-right: 20;
+    width: 80px;
+    height: 46px;
+}
