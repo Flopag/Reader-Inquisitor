@@ -48,7 +48,17 @@
     width: fit-content;
 }
 
-.Calendar-row {
+#Calendar-title {
+    width: calc(52px * 5);
+    height: 50px;
+    padding-top: 1px;
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Calendar-row, .Calendar-headers {
     display: flex;
     flex-direction: row;
 }
