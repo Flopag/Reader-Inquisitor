@@ -4,6 +4,7 @@ resources:
 namePrefix: e2e-
 patches:
   - path: deployment/backend-patch.yaml
+  - path: deployment/frontend-patch.yaml
   - path: service/backend-patch.yaml
   - path: service/frontend-patch.yaml
 secretGenerator:
@@ -17,3 +18,4 @@ secretGenerator:
   - name: express
     literals:
       - EXPRESS_SESSION_SECRET=Doyourealythingthatisthesecret
+      - POWER_USER_PASS=thisisaverysecurepass
