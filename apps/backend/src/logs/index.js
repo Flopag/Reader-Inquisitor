@@ -49,6 +49,38 @@ async (req, res) => {
     Respond.success(res, `See data for the last completion corresponding to book id=${book_id}`, data);
 });
 
+router.get('/last',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const data = await LogService.get_last_log(req.user.user_id);
+
+    Respond.success(res, `See data for the last log`, data);
+});
+
+router.get('/last/:book_id',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const { book_id } = req.params;
+
+    if(!book_id)
+        ErrorFactory.bad_argument(`The id of the book is missing`);
+
+    if(!await BookService.does_exist_by_id(book_id))
+        ErrorFactory.bad_argument(`The book with id=${book_id} does not exist`);
+
+    const data = await LogService.get_last_log_from_book(req.user.user_id, book_id);
+
+    Respond.success(res, `See data for the last log from book with id=${book_id}`, data);
+});
+
+router.get('/',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const data = await LogService.get_all_logs(req.user.user_id);
+
+    Respond.success(res, `See data for the list of all logs`, data);
+});
+
 router.get('/:book_id',
     require('@app/auth/middlewares').at_least_basic,
 async (req, res) => {
@@ -60,7 +92,7 @@ async (req, res) => {
     if(!await BookService.does_exist_by_id(book_id))
         ErrorFactory.bad_argument(`The book with id=${book_id} does not exist`);
 
-    const data = await LogService.get_all_logs(req.user.user_id, book_id);
+    const data = await LogService.get_all_logs_by_book(req.user.user_id, book_id);
 
     Respond.success(res, `See data for the list og logs corresponding to book id=${book_id}`, data);
 });

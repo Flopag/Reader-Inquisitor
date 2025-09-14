@@ -14,3 +14,5 @@ spec:
           value: "todetermine"
         - name: IS_TESTING
           value: "justarandomstring"
+        - name: FRONTEND_URL
+          value: "http://e2e-frontend:1234/"

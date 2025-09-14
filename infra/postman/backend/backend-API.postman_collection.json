@@ -753,7 +753,7 @@
 					"response": []
 				},
 				{
-					"name": "logs-list_all",
+					"name": "logs-list_all_by_book",
 					"event": [
 						{
 							"listen": "test",
@@ -961,6 +961,67 @@
 							"path": [
 								"logs",
 								"completion",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logs-get_last_log",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{basic_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/logs/last",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logs",
+								"last"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logs-get_last_log_by_book",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{basic_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/logs/last/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logs",
+								"last",
 								"2"
 							]
 						}

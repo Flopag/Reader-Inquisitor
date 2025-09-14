@@ -25,6 +25,10 @@ async function get_users_with_url(){
     }});
 }
 
+async function get_all_users(){
+    return await User.findAll();
+}
+
 async function find_or_create_user_by_discord_id(discord_id){
     return await User.findOrCreate({
             where: {discord_id: discord_id},
@@ -34,10 +38,21 @@ async function find_or_create_user_by_discord_id(discord_id){
         })
 }
 
+async function find_or_create_bot_by_discord_id(discord_id){
+    return await User.findOrCreate({
+            where: {discord_id: discord_id},
+            defaults: {
+                role_name: "Bot",
+            },
+        })
+}
+
 module.exports = {
     does_user_exists,
     get_user,
     set_user_url,
     get_users_with_url,
+    get_all_users,
     find_or_create_user_by_discord_id,
+    find_or_create_bot_by_discord_id,
 };

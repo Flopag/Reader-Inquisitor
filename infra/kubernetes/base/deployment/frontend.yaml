@@ -24,6 +24,11 @@ spec:
         args: ["run", "start"]
         ports:
         - containerPort: 1234
+        env:
+        - name: API_PROTOCOL
+          value: "<to_replace>"
+        - name: API_URL
+          value: "<to_replace>"
         readinessProbe:
           exec:
             command:

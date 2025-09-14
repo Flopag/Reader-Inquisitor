@@ -26,11 +26,13 @@
   },
   "dependencies": {
     "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "module-alias": "^2.2.3",
     "mysql2": "^3.14.3",
     "passport": "^0.7.0",
+    "passport-custom": "^1.1.1",
     "passport-discord": "^0.1.4",
     "sequelize": "^6.37.7"
   }

@@ -48,6 +48,14 @@ async (req, res) => {
     Respond.success(res, `All active users are in data`, users);
 });
 
+router.get('/all',
+    require('@app/auth/middlewares').at_least_admin,
+async (req, res) => {
+    const users = await UserService.get_all_users();
+
+    Respond.success(res, `All users are in data`, users);
+});
+
 router.get('/can_i_basic',
     require('@app/auth/middlewares').at_least_basic,
 (req, res) => {

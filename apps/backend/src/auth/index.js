@@ -6,14 +6,27 @@ const router = express.Router();
 
 router.get('/discord', passport.authenticate('discord'));
 
-router.get('/discord/callback', passport.authenticate('discord', {
-    failureRedirect: '/'
-}), function(req, res) {
+router.get('/power_user', 
+    require('@app/auth/middlewares').on_backdoor,
+    passport.authenticate('power_user', {
+        failureRedirect: '/'
+    }), 
+function(req, res) {
     res.redirect('/');
+});
+
+router.get('/discord/callback', passport.authenticate('discord', {
+    failureRedirect: process.env.FRONTEND_URL
+}), function(req, res) {
+    res.redirect(process.env.FRONTEND_URL);
 });
 
 if(process.env.IS_TESTING)
     router.use(require('@app/auth/middlewares').mocked_user);
 router.use(require('@app/auth/middlewares').is_connected);
+
+router.get('/logout', function(req, res) {
+    req.session.destroy();
+});
 
 module.exports = router;

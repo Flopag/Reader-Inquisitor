@@ -33,8 +33,29 @@ async function get_latest_completion(user_id, book_id){
     return (response) ? response.completion : null;
 }
 
-async function get_all_logs(user_id, book_id){
+async function get_all_logs(user_id){
     return (await Log.findAll({
+            where: {user_id: user_id},
+            order: [['read_log_id', 'DESC']],
+        }));
+}
+
+async function get_all_logs_by_book(user_id, book_id){
+    return (await Log.findAll({
+            where: {user_id: user_id, book_id: book_id},
+            order: [['read_log_id', 'DESC']],
+        }));
+}
+
+async function get_last_log(user_id){
+    return (await Log.findOne({
+            where: {user_id: user_id},
+            order: [['read_log_id', 'DESC']],
+        }));
+}
+
+async function get_last_log_from_book(user_id, book_id){
+    return (await Log.findOne({
             where: {user_id: user_id, book_id: book_id},
             order: [['read_log_id', 'DESC']],
         }));
@@ -48,5 +69,8 @@ module.exports = {
     find_or_create,
     get_latest_completion,
     get_all_logs,
+    get_all_logs_by_book,
+    get_last_log,
+    get_last_log_from_book,
     destroy_by_id,
 };
