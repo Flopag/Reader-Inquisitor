@@ -13,4 +13,4 @@ spec:
         - name: DISCORD_CALLBACK_URL
           value: "http://gouguel.com:8080/auth/discord/callback"
         - name: FRONTEND_URL
-          value: "http://gouguel.com/"
+          value: "http://gouguel.com"
