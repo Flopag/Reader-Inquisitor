@@ -5,18 +5,86 @@ class Calendar extends React.Component {
     constructor(props) {
         super(props);
         const today = new Date();
+        content_map: null
         this.state = {
             year: today.getFullYear(),
-            month: today.getMonth() + 1
+            month: today.getMonth() + 1,
+            content_array: props.content,
         };
     }
-    
-    get_calendar_row_html(first, last, today){
-        const cells = [];
 
-        for(let i=0; i < 7; ++i){
-            const is_active = (i < first || i > last) ? false : true;
-            cells.push(<div key={i} className={`Calendar-cell-${is_active} today-${i==today}`} id={`calendar-cell-${i}`}></div>)
+    date_to_string(date){
+        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+    }
+
+    date_to_ij(date){
+        const { year, month } = this.state;
+        if(!(date.getMonth()+1 == month && date.getFullYear() == year))
+            return (-1, -1);
+
+        const dd = date.getDate();
+    
+        const first_day = new Date(year, month-1, 1).getDay();
+
+        const j = date.getDay();
+        
+        const i = Math.floor((dd+first_day)/7);
+
+        return [i, j];
+    }
+
+    ij_to_date(i, j){
+        const { year, month } = this.state;
+
+        const first_day = new Date(year, month-1, 1).getDay();
+
+        const dd = i*7+j-first_day+1;
+
+        if(dd == 0)
+            return null;
+
+        return new Date(year, month-1, dd);
+    }
+
+    fill_content_map(){
+        const { content_array } = this.state;
+
+        if(!content_array)
+            return;
+
+        const new_content_map = {};
+
+        content_array.forEach(element => {
+            const key = this.date_to_string(element.date);
+            new_content_map[key] = [element.mini, element.page];
+        });
+
+        this.content_map = new_content_map;
+    }
+
+    get_in_content_map(date){
+        if(!this.content_map || !date)
+            return null;
+
+        const key = this.date_to_string(date);
+
+        return this.content_map[key]
+    }
+    
+    get_calendar_row_html(i){
+        const { month } = this.state;
+        const cells = [];
+        const today_ij = this.date_to_ij(new Date());
+        
+        for(let j=0; j < 7; ++j){
+            const current_date = this.ij_to_date(i,j)
+            const element = this.get_in_content_map(current_date);
+            const is_active = (current_date?.getMonth() == month-1);
+            cells.push(<div 
+                key={j} 
+                className={`Calendar-cell-${is_active} today-${j==today_ij[1] && i==today_ij[0]}`} 
+                id={`calendar-cell-${j}`}>{(element && is_active) ? element[0] : ""}
+            </div>)
         }
 
         return cells;
@@ -26,26 +94,13 @@ class Calendar extends React.Component {
         if(month < 1 || month > 12)
             return;
 
-        const first_day = new Date(year, month-1, 1).getDay();
-        const last_day = new Date(year, month, 0).getDay();
-
-        const today = new Date();
-        let totay_dd = -1;
-        if(today.getMonth()+1 == month && today.getFullYear() == year)
-            totay_dd = today.getDate();
-
         const rows = [];
 
         for(let i=0; i < 5; ++i){
-            let today_day = -1;
-
-            if(totay_dd != -1 && totay_dd+first_day <= (i+1)*7 && totay_dd+first_day > i*7)
-                today_day = today.getDay();
-
             rows.push(<div key={i} className='Calendar-row' id={`calendar-row-${i}`}>{
-                (i==0) ? this.get_calendar_row_html(first_day, 7, today_day) :
-                (i==4) ? this.get_calendar_row_html(0, last_day, today_day) :
-                this.get_calendar_row_html(0, 7, today_day)
+                (i==0) ? this.get_calendar_row_html(i) :
+                (i==4) ? this.get_calendar_row_html(i) :
+                this.get_calendar_row_html(i)
             }</div>)
         }
 
@@ -81,6 +136,8 @@ class Calendar extends React.Component {
     }
 
     render(){
+        this.fill_content_map();
+
         const { year, month } = this.state;
 
         const to_previous_month = () => {
