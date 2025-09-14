@@ -7,6 +7,25 @@
     border: 1px solid black;
 }
 
+.Calendar-cell-true:hover {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.Calendar-cell-true.today-true {
+    width: 46px;
+    height: 46px;
+    border: 3px solid #5662f6;
+}
+
+.Calendar-cell-true.today-true:hover {
+    width: 36px;
+    height: 36px;
+    margin: 5px;
+}
+
 .Calendar-cell-false {
     padding: 1px;
     background-color: black;

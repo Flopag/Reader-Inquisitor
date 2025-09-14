@@ -3,12 +3,12 @@ import "./css/calendar.css";
 
 class Calendar extends React.Component {
     render(){
-        const get_calendar_row_html = (first, last) => {
+        const get_calendar_row_html = (first, last, today) => {
             const cells = [];
 
             for(let i=0; i < 7; ++i){
                 const is_active = (i < first || i > last) ? false : true;
-                cells.push(<div key={i} className={`Calendar-cell-${is_active}`} id={`calendar-cell-${i}`}></div>)
+                cells.push(<div key={i} className={`Calendar-cell-${is_active} today-${i==today}`} id={`calendar-cell-${i}`}></div>)
             }
 
             return cells;
@@ -21,13 +21,23 @@ class Calendar extends React.Component {
             const first_day = new Date(year, month-1, 1).getDay();
             const last_day = new Date(year, month, 0).getDay();
 
+            const today = new Date();
+            let totay_dd = -1;
+            if(today.getMonth()+1 == month && today.getFullYear() == year)
+                totay_dd = today.getDate();
+
             const rows = [];
 
             for(let i=0; i < 5; ++i){
+                let today_day = -1;
+
+                if(totay_dd != -1 && totay_dd+first_day <= (i+1)*7 && totay_dd+first_day > i*7)
+                    today_day = today.getDay();
+
                 rows.push(<div key={i} className='Calendar-row' id={`calendar-row-${i}`}>{
-                    (i==0) ? get_calendar_row_html(first_day, 7) :
-                    (i==4) ? get_calendar_row_html(0, last_day) :
-                    get_calendar_row_html()
+                    (i==0) ? get_calendar_row_html(first_day, 7, today_day) :
+                    (i==4) ? get_calendar_row_html(0, last_day, today_day) :
+                    get_calendar_row_html(0, 7, today_day)
                 }</div>)
             }
 
