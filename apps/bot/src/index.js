@@ -16,17 +16,24 @@ app.listen(port, () => {
 
 app.patch('/check_users', async (req, res) => {
     const p = spawn('python3', ['./src/scripts/check_users.py']);
+    let resultArray = null;
 
+    
     p.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+        try {
+            resultArray = JSON.parse(data.toString());
+        } catch (err) {
+            console.error("Error parsing JSON:", err);
+        }
     });
-
+    
     p.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
+        console.error(`stderr: ${data}`);
     });
-
+    
     p.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+        console.log(`child process exited with code ${code}`);
+        require('@utils/responses').success(res, `See data to get results`, resultArray);
     });
 });
 
