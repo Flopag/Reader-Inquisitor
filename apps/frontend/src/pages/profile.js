@@ -36,6 +36,8 @@ function profile_page(){
 
     useEffect(() => {
         const get_user = async () => {
+            if(!new_user_url)
+                return;
             await axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/users`, 
                 {user_url: new_user_url}, 
                 {withCredentials: true})
@@ -76,6 +78,12 @@ function profile_page(){
             <Button 
                 message={"Logout"} 
                 on_click={() => {axios.get(`${process.env.API_PROTOCOL}://${process.env.API_URL}/auth/logout`, {withCredentials: true,}); window.location.reload(true);}} 
+                background_color={"#f66956"}
+                color={"white"}
+            />
+            <Button 
+                message={"BOT"} 
+                on_click={() => {axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/bot/check_users`, {}, {withCredentials: true,});}} 
                 background_color={"#f66956"}
                 color={"white"}
             />

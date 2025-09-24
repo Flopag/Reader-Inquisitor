@@ -60,9 +60,8 @@ function usurpate(req, res, next) {
         }
         return UserService.get_user(req.body.usurpation);
     }).then((user) => {
-        if( ((! (req.user.role_name === "Bot" || req.user.role_name === "Maintainer")) && 
-            (user.role_name === "Admin" || user.role_name === "Maintainer" || user.role_name === "Bot")) 
-            || user.role_name === "Maintainer"){
+        if( ((! (req.user.role_name === "Bot")) && 
+            (user.role_name === "Admin" || user.role_name === "Maintainer" || user.role_name === "Bot"))){
             var err = new Error('An authorized user cannot usurpate another authorized user');
             err.status = 401
             throw err;
