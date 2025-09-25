@@ -13,11 +13,6 @@ async function is_last_exucution_made_x_less_than_hours_ago(bot_name, hours){
     const last_execution = new Date(last_log.assigned_date);
     const x = hours * 60 * 60 * 1000;
 
-    console.log(now);
-    console.log(last_log.assigned_date);
-    console.log(last_execution);
-    console.log(now - last_execution);
-
     if(now - last_execution < x)
         return true;
     return false;
