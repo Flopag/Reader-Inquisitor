@@ -13,7 +13,7 @@ CREATE TABLE bot_names (
 
 CREATE TABLE bot_logs (
     bot_logs_id INT UNSIGNED AUTO_INCREMENT,
-    assigned_date DATE NOT NULL,
+    assigned_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     bot_name VARCHAR(32) NOT NULL,
     PRIMARY KEY(bot_logs_id),
     FOREIGN KEY (bot_name) REFERENCES bot_names(bot_name) ON DELETE CASCADE

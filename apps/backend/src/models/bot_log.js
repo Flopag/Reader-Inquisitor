@@ -22,6 +22,6 @@ module.exports = sequelize.define('BotLog', {
     allowNull: false,
   },
 }, {
-  tableName: 'bot°logs',
+  tableName: 'bot_logs',
   timestamps: false,
 });
