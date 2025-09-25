@@ -114,3 +114,4 @@ CREATE TABLE user_items (
 INSERT INTO roles (role_name) VALUES ('Admin'), ('Maintainer'), ('Basic'), ('Bot');
 INSERT INTO gommette_colors (color) VALUES ('Red'), ('Green');
 INSERT INTO currencies (currency_name) VALUES ('green_gommette'), ('red_gommette');
+INSERT INTO bot_names (bot_name) VALUES ('check_users');

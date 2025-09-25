@@ -22,6 +22,10 @@ module.exports = sequelize.define('User', {
     },
     onDelete: 'SET NULL',
   },
+  username: {
+    type: DataTypes.STRING(32),
+    allowNull: true,
+  },
   user_url: {
     type: DataTypes.STRING(2048),
     allowNull: true,

@@ -54,7 +54,6 @@ for user in active_users:
         if(log_value.split(" ")[0] == "(page"):
             log_value = int(log_value.split(" ")[1]) / int(log_value.split(" ")[3].split(")")[0])
             log_value *= 100
-            log_value = round(log_value)
         else:
             log_value = int(log_value.split("(")[1].split("%")[0])
 
