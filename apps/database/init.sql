@@ -6,9 +6,23 @@ CREATE TABLE roles (
     PRIMARY KEY(role_name)
 );
 
+CREATE TABLE bot_names (
+    bot_name VARCHAR(32) NOT NULL,
+    PRIMARY KEY(bot_name)
+);
+
+CREATE TABLE bot_logs (
+    bot_logs_id INT UNSIGNED AUTO_INCREMENT,
+    assigned_date DATE NOT NULL,
+    bot_name VARCHAR(32) NOT NULL,
+    PRIMARY KEY(bot_logs_id),
+    FOREIGN KEY (bot_name) REFERENCES bot_names(bot_name) ON DELETE CASCADE
+);
+
 CREATE TABLE users (
     user_id INT UNSIGNED AUTO_INCREMENT,
     discord_id BIGINT UNSIGNED NOT NULL UNIQUE,
+    username VARCHAR(32),
     role_name VARCHAR(16),
     user_url VARCHAR(2048) DEFAULT NULL,
     PRIMARY KEY (user_id),
@@ -43,7 +57,7 @@ CREATE TABLE read_logs (
     read_log_id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    completion TINYINT NOT NULL CHECK (completion<=100),
+    completion FLOAT NOT NULL CHECK (completion >= 0 AND completion <= 100),
     book_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (read_log_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
