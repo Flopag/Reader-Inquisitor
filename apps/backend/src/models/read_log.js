@@ -22,7 +22,7 @@ module.exports = sequelize.define('ReadLog', {
     allowNull: false,
   },
   completion: {
-    type: DataTypes.TINYINT,
+    type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
       max: 100,

@@ -52,6 +52,7 @@ app.use('/transactions', require('@app/transactions/index'));
 app.use('/balances', require('@app/account_balances/index'));
 app.use('/gommettes', require('@app/user_gommettes/index'));
 app.use('/users', require('@app/users/index'));
+app.use('/bot', require('@app/bots/index'));
 
 app.use(require('@utils/errors').middleware);
 

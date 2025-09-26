@@ -1,10 +1,10 @@
 {
-  "name": "backend",
+  "name": "bot",
   "version": "1.0.0",
-  "description": "Core of the backend",
+  "description": "Makes all the heavy computations",
   "scripts": {
     "test": "jest --config test/jest.config.js",
-    "start": "node --env-file=.env src/index.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,25 +16,13 @@
     "url": "https://github.com/Flopag/Reader-Inquisitor/issues"
   },
   "homepage": "https://github.com/Flopag/Reader-Inquisitor#readme",
-  "devDependencies": {
-    "jest": "^30.0.5"
-  },
   "_moduleAliases": {
-    "@models": "src/models",
     "@utils": "src/utils",
     "@app": "src"
   },
   "dependencies": {
-    "cheerio": "^1.1.2",
-    "cors": "^2.8.5",
     "express": "^5.1.0",
-    "express-session": "^1.18.2",
-    "module-alias": "^2.2.3",
-    "mysql2": "^3.14.3",
-    "passport": "^0.7.0",
-    "passport-custom": "^1.1.1",
-    "passport-discord": "^0.1.4",
-    "request-promise-native": "^1.0.9",
-    "sequelize": "^6.37.7"
+    "jest": "^30.1.3",
+    "module-alias": "^2.2.3"
   }
 }

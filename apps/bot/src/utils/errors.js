@@ -6,12 +6,6 @@ function bad_argument(message) {
     throw err;
 }
 
-function forbidden(message) {
-    var err = new Error(`Forbidden error:\n${message}`);
-    err.status = 403
-    throw err;
-}
-
 function runtime(message){
     var err = new Error(message);
     throw err;
@@ -33,7 +27,6 @@ function middleware(err, req, res, next){
 
 module.exports = {
     bad_argument,
-    forbidden,
     runtime,
     middleware
 };
