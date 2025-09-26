@@ -35,7 +35,7 @@ jobs:
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
     
   e2e-test:
-    needs: [build-frontend, build-backend]
+    needs: [build-frontend, build-backend, build-bot]
     uses: ./.github/workflows/e2e_test.yml
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
