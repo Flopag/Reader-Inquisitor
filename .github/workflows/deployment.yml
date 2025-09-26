@@ -24,6 +24,15 @@ jobs:
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-bot:
+    needs: code-test
+    uses: ./.github/workflows/service_build.yml
+    with:
+      build_tag: ${{ github.sha }}
+      service: bot
+    secrets:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
     
   e2e-test:
     needs: [build-frontend, build-backend]

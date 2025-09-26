@@ -5,3 +5,4 @@ namePrefix: prod-
 patches:
   - path: deployment/backend-patch.yaml
   - path: deployment/frontend-patch.yaml
+  - path: deployment/bot-patch.yaml

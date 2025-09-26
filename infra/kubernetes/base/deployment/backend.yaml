@@ -49,6 +49,8 @@ spec:
           value: "<to_replace>"
         - name: FRONTEND_URL
           value: "<to_replace>"
+        - name: BOT_URL
+          value: "<to_replace>"
         - name: DISCORD_SECRET
           valueFrom:
             secretKeyRef:
