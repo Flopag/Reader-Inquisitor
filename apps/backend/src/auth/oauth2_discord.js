@@ -3,7 +3,6 @@ Code from : https://www.passportjs.org/packages/passport-discord/
 */
 var passport = require('passport');
 var DiscordStrategy = require('passport-discord').Strategy;
-var User = require('@models/user');
 const UserService = require('@app/users/service');
 const CustomStrategy = require('passport-custom').Strategy;
 
@@ -17,7 +16,8 @@ passport.use('discord', new DiscordStrategy({
 },
 function(accessToken, refreshToken, profile, cb) {
     UserService.find_or_create_user_by_discord_id(
-        profile.id
+        profile.id,
+        profile.username
     ).then(([user, created]) => {
         return cb(null, user)
     }).catch(err => {

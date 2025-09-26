@@ -29,11 +29,12 @@ async function get_all_users(){
     return await User.findAll();
 }
 
-async function find_or_create_user_by_discord_id(discord_id){
+async function find_or_create_user_by_discord_id(discord_id, username){
     return await User.findOrCreate({
             where: {discord_id: discord_id},
             defaults: {
                 role_name: "Basic",
+                username: username || null
             },
         })
 }

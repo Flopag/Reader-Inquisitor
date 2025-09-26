@@ -33,7 +33,10 @@ app.patch('/check_users', async (req, res) => {
     
     p.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
-        require('@utils/responses').success(res, `See data to get results`, resultArray);
+        if(code==0)
+            require('@utils/responses').success(res, `See data to get results`, resultArray);
+        else
+            require('@utils/responses').fail(res, "The bot exited with exit code 1");
     });
 });
 

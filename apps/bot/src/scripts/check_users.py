@@ -24,7 +24,7 @@ session = requests.Session()
 session.get(url + "/auth/power_user?pass=" + password)
 
 if(not session.get(url + "/users/").json()["success"]):
-    #print("> Connection refused")
+    print("> Connection refused")
     exit(1)
 
 #print("> Connected!")
@@ -32,10 +32,6 @@ if(not session.get(url + "/users/").json()["success"]):
 #print("Get all active users html pages...")
 
 active_users = session.get(url + "/users/active").json()["data"]
-
-if(not active_users):
-    #print("> Cannot get active users")
-    exit(1)
 
 new_logs = []
 
@@ -70,7 +66,7 @@ for user in active_users:
 req = session.get(url + "/books").json()
 
 if(not req["success"]):
-    #print("> Cannot get books")
+    print("> Cannot get books")
     exit(1)
 
 books = req["data"]
@@ -94,7 +90,7 @@ for new_log in new_logs:
             res = session.post(url + "/books", json={"goodreads_url": book_url}).json()
 
             if(not req["success"]):
-                #print("> Cannot create book")
+                print("> Cannot create book")
                 exit(1)
             
             book_id = res["data"]["book_id"]
@@ -109,21 +105,19 @@ for new_log in new_logs:
 
 all_users = session.get(url + "/users/all").json()["data"]
 
-if(not active_users):
-    #print("> Cannot get all users")
+if(not all_users):
+    print("> Cannot get all users")
     exit(1)
 
 attribution = []
 
 for user in all_users:
-    last_log = session.get(url + "/logs/last", json={
-            "usurpation": user["user_id"]
-            }).json()["data"]
+    last_log = session.get(url + "/logs/last?usurpation=" + str(user["user_id"])).json()["data"]
     
     logged_at = None
+    now = datetime.now(timezone.utc)
     if(last_log):
         logged_at = datetime.fromisoformat(last_log['logged_at'].replace("Z", "+00:00"))
-        now = datetime.now(timezone.utc)
 
     if(logged_at and now - logged_at < timedelta(hours=25)):
         #print("> Green gommette attributed to " + str(user["user_id"]))

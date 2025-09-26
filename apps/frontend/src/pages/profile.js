@@ -27,7 +27,7 @@ function profile_page(){
                 })
                 .catch((err) => {console.log(err)});
 
-            set_name((user) ? user.discord_id : null);
+            set_name((user) ? user.username || user.discord_id : null);
             set_role((user) ? user.role_name : null);
             set_user_url((user) ? user.user_url : null);
             set_already_tried(true);
