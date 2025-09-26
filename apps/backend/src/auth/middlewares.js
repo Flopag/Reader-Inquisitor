@@ -32,7 +32,12 @@ function mocked_user(req, res, next) {
 };
 
 function usurpate(req, res, next) {
-    if(!req.body?.usurpation){
+    let usurpation = null;
+    if(req.method == "GET")
+        usurpation = req.query.usurpation;
+    else
+        usurpation = req.body?.usurpation;
+    if(!usurpation){
         next();
         return;
     }
@@ -51,18 +56,17 @@ function usurpate(req, res, next) {
         return;
     }
 
-    UserService.does_user_exists(req.body.usurpation
+    UserService.does_user_exists(usurpation
     ).then((does_exists) => {
         if(!does_exists){
-            var err = new Error(`The given user with id ${req.body.usurpation} does not exists`);
+            var err = new Error(`The given user with id ${usurpation} does not exists`);
             err.status = 400
             throw err;
         }
-        return UserService.get_user(req.body.usurpation);
+        return UserService.get_user(usurpation);
     }).then((user) => {
-        if( ((! (req.user.role_name === "Bot" || req.user.role_name === "Maintainer")) && 
-            (user.role_name === "Admin" || user.role_name === "Maintainer" || user.role_name === "Bot")) 
-            || user.role_name === "Maintainer"){
+        if( ((! (req.user.role_name === "Bot")) && 
+            (user.role_name === "Admin" || user.role_name === "Maintainer" || user.role_name === "Bot") && req.method != "GET")){
             var err = new Error('An authorized user cannot usurpate another authorized user');
             err.status = 401
             throw err;

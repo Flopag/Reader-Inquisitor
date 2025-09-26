@@ -15,4 +15,6 @@ spec:
         - name: IS_TESTING
           value: "justarandomstring"
         - name: FRONTEND_URL
-          value: "http://e2e-frontend:1234/"
+          value: "http://e2e-frontend:1234"
+        - name: BOT_URL
+          value: "http://e2e-bot:3002"
