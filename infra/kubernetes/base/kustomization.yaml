@@ -6,5 +6,7 @@ resources:
   - service/backend.yaml
   - service/frontend.yaml
   - service/database.yaml
+  - service/backend-backdoor.yaml
+  - service/bot.yaml
   - persistentVolumeClaim/database.yaml
   - namespace/prod.yaml

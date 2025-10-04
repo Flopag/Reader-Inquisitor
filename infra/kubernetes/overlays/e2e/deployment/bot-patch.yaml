@@ -9,4 +9,4 @@ spec:
       - name: bot
         env:
         - name: BACKEND_URL
-          value: "http://e2e-backend:4000"
+          value: "http://e2e-backend-backdoor:4000"
