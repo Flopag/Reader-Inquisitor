@@ -9,4 +9,4 @@ spec:
       - name: bot
         env:
         - name: BACKEND_URL
-          value: "http://prod-backend:4000"
+          value: "http://prod-backend-backdoor:4000"
