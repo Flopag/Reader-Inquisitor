@@ -29,13 +29,26 @@ async (req, res) => {
     /* Get book_name from goodreads */
     var book_name = "";
 
-    const response = await fetch(goodreads_url.href);
-    const data = await response.text();
+    // From https://github.com/berstend/puppeteer-extra/tree/master/packages/puppeteer-extra-plugin-stealth
+    const puppeteer = require('puppeteer-extra')
+
+    const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+    puppeteer.use(StealthPlugin())
+
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+        ],
+        });
+    const page = await browser.newPage();
+    await page.goto(goodreads_url.href, { waitUntil: 'networkidle2' });
+
+    const data = await page.content();
 
     const $ = require('cheerio').load(data);
     // Selector written using chrome expect tab
     book_name = $('#__next > div.PageFrame.PageFrame--siteHeaderBanner > main > div.BookPage__gridContainer > div.BookPage__rightColumn > div.BookPage__mainContent > div.BookPageTitleSection > div.BookPageTitleSection__title > h1').text();
-
 
     if(book_name === "")
         ErrorFactory.runtime(`The mined book name is corrupted`);
