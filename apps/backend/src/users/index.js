@@ -40,10 +40,18 @@ async (req, res) => {
     Respond.success(res, `The user with user id ${req.user.user_id} has its url modified`, user);
 });
 
-router.get('/active',
+router.get('/goodreads',
     require('@app/auth/middlewares').at_least_admin,
 async (req, res) => {
     const users = await UserService.get_users_with_url();
+
+    Respond.success(res, `All goodreads users are in data`, users);
+});
+
+router.get('/active',
+    require('@app/auth/middlewares').at_least_admin,
+async (req, res) => {
+    const users = await UserService.get_active_users();
 
     Respond.success(res, `All active users are in data`, users);
 });

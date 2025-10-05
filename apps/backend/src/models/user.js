@@ -31,6 +31,11 @@ module.exports = sequelize.define('User', {
     allowNull: true,
     defaultValue: null,
   },
+  is_active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 }, {
   tableName: 'users',
   timestamps: false,

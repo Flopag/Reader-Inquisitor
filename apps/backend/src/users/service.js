@@ -25,6 +25,12 @@ async function get_users_with_url(){
     }});
 }
 
+async function get_active_users(){
+    return await User.findAll({where: {
+        is_active: true
+    }});
+}
+
 async function get_all_users(){
     return await User.findAll();
 }
@@ -53,6 +59,7 @@ module.exports = {
     get_user,
     set_user_url,
     get_users_with_url,
+    get_active_users,
     get_all_users,
     find_or_create_user_by_discord_id,
     find_or_create_bot_by_discord_id,
