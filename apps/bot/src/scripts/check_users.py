@@ -1,8 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 import json
 import os 
+import sys
+
+read_only = True
+
+if(len(sys.argv) > 1):
+    read_only = False
 
 # Initiate connection with backend
 
@@ -42,7 +48,7 @@ for user in active_users:
 
     # Transform goodreads logs into ours
     goodreads_url = user["user_url"]
-    if(goodreads_url):
+    if(not read_only and goodreads_url):
         goodreads_logs = []
 
         soup = BeautifulSoup(requests.get(goodreads_url, headers=fooling_goodreads_headers).text, 'html.parser')
@@ -113,10 +119,14 @@ for user in active_users:
             "book_id": last_user_log["book_id"] if not res["success"] else None,
             "gommette": "green"
         }]
+        if(not read_only):
+            session.post(url + "/gommettes/green", json={"usurpation": user["user_id"], "book_id": last_user_log["book_id"]}).json()
     else:
         attribution += [{
-            "user_id": user["user_id"],
+            "user": user,
             "gommette": "red"
         }]
+        if(not read_only):
+            session.post(url + "/gommettes/red", json={"usurpation": user["user_id"]}).json()
 
-print(attribution)
+print(json.dumps(attribution))
