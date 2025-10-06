@@ -25,6 +25,7 @@ CREATE TABLE users (
     username VARCHAR(32),
     role_name VARCHAR(16),
     user_url VARCHAR(2048) DEFAULT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id),
     FOREIGN KEY (role_name) REFERENCES roles(role_name) ON DELETE SET NULL
 );
