@@ -1924,6 +1924,90 @@
 					"response": []
 				},
 				{
+					"name": "users-desactivate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"see all active users\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/desactivate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"desactivate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users-activate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"see all active users\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    {{admin_user}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/activate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "users-get_goodreads",
 					"event": [
 						{

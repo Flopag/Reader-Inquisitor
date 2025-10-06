@@ -8,6 +8,9 @@ function profile_page(){
     const [already_tried, set_already_tried] = useState(false);
     const [name, set_name] = useState(null);
     const [role, set_role] = useState(null);
+    const [is_active, set_is_active] = useState(null);
+    const [activate, set_activate] = useState(false);
+    const [unactivate, set_unactivate] = useState(false);
     const [user_url, set_user_url] = useState(null);
     const [new_user_url, set_new_user_url] = useState(null);
     const [update_user_url, set_update_user_url] = useState(false);
@@ -31,11 +34,46 @@ function profile_page(){
             set_name((user) ? user.username || user.discord_id : null);
             set_role((user) ? user.role_name : null);
             set_user_url((user) ? user.user_url : null);
+            set_is_active((user) ? user.is_active : null);
             set_already_tried(true);
         };
 
         get_user();
     }, []);
+
+    useEffect(() => {
+        const activate_user = async () => {
+            if(!activate)
+                return;
+
+            await axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/users/activate`, {}, {
+                    withCredentials: true,
+                })
+                .then((res) => {
+                    window.location.reload(true);
+                })
+                .catch((err) => {console.log(err)});
+        };
+
+        activate_user();
+    }, [activate]);
+
+    useEffect(() => {
+        const activate_user = async () => {
+            if(!unactivate)
+                return;
+
+            await axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/users/desactivate`, {}, {
+                    withCredentials: true,
+                })
+                .then((res) => {
+                    window.location.reload(true);
+                })
+                .catch((err) => {console.log(err)});
+        };
+
+        activate_user();
+    }, [unactivate]);
 
     useEffect(() => {
         const run_bot = async () => {
@@ -90,6 +128,29 @@ function profile_page(){
 
         get_user();
     }, [update_user_url]);
+
+    const get_active_html = () => {
+        if(is_active)
+            return  <>
+                        <p>The account is active</p>
+                        <Button 
+                            message={"desactivate"} 
+                            on_click={() => {set_unactivate(true);}} 
+                            background_color={"#f66956"}
+                            color={"white"}
+                        />
+                    </>;
+        else
+            return  <>
+                        <p>The account is unactive</p>
+                        <Button 
+                            message={"activate"} 
+                            on_click={() => {set_activate(true);}} 
+                            background_color={"#56f656ff"}
+                            color={"white"}
+                        />
+                    </>;
+        };
 
     const get_bot_html = () => {
         if(!role || !(role == "Maintainer" || role == "Admin"))
@@ -155,6 +216,7 @@ function profile_page(){
                 background_color={"#5662f6"}
                 color={"white"}
             />
+            {get_active_html()}
             <Button 
                 message={"Logout"} 
                 on_click={() => {axios.get(`${process.env.API_PROTOCOL}://${process.env.API_URL}/auth/logout`, {withCredentials: true,}); window.location.reload(true);}} 

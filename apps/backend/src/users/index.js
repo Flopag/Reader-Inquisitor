@@ -40,6 +40,22 @@ async (req, res) => {
     Respond.success(res, `The user with user id ${req.user.user_id} has its url modified`, user);
 });
 
+router.patch('/activate',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const user = await UserService.activate_user(req.user.user_id);
+
+    Respond.success(res, `The user with user id ${req.user.user_id} has has been activated`, user);
+});
+
+router.patch('/desactivate',
+    require('@app/auth/middlewares').at_least_basic,
+async (req, res) => {
+    const user = await UserService.desactivate_user(req.user.user_id);
+
+    Respond.success(res, `The user with user id ${req.user.user_id} has has been desactivated`, user);
+});
+
 router.get('/goodreads',
     require('@app/auth/middlewares').at_least_admin,
 async (req, res) => {
