@@ -103,14 +103,20 @@ for user in active_users:
         logged_at = datetime.fromisoformat(last_user_log['logged_at'].replace("Z", "+00:00"))
 
     last_check = None
-
     res = session.get(url + f'/bot/check_users/log').json()
-
     if(res["success"]):
         last_bot_log = res["data"]
         last_check = datetime.fromisoformat(last_bot_log["assigned_date"].replace("Z", "+00:00"))
 
-    if((logged_at and last_check and logged_at > last_check) or (logged_at and not last_check)):
+    second_last_check = None
+    res = session.get(url + f'/bot/check_users/log/second').json()
+    if(res["success"]):
+        second_last_bot_log = res["data"]
+        second_last_check = datetime.fromisoformat(second_last_bot_log["assigned_date"].replace("Z", "+00:00"))
+
+    if((logged_at and last_check and second_last_check and logged_at < last_check and logged_at > second_last_check) 
+       or (logged_at and last_check and not second_last_check and logged_at < last_check)
+       or (logged_at and not last_check and not read_only)):
         res = session.get(url + f'/books/{last_user_log["book_id"]}').json()
 
         attribution += [{
@@ -121,6 +127,11 @@ for user in active_users:
         }]
         if(not read_only):
             session.post(url + "/gommettes/green", json={"usurpation": user["user_id"], "book_id": last_user_log["book_id"]}).json()
+    elif((logged_at and not last_check and read_only)):
+        attribution += [{
+            "user": user,
+            "gommette": "None"
+        }]
     else:
         attribution += [{
             "user": user,

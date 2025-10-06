@@ -12,6 +12,7 @@ function profile_page(){
     const [new_user_url, set_new_user_url] = useState(null);
     const [update_user_url, set_update_user_url] = useState(false);
     const [user_attributions, set_user_attributions] = useState(null);
+    const [user_attributions_updated, set_user_attributions_updated] = useState(false);
     const [run_bot_check_users, set_run_bot_check_users] = useState(false);
 
     useEffect(() => {
@@ -42,39 +43,33 @@ function profile_page(){
                 return;
             set_run_bot_check_users(false);
 
-            const result = await axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/bot/check_users`, 
-                {}, 
+            let result = await axios.get(`${process.env.API_PROTOCOL}://${process.env.API_URL}/bot/check_users`,  
                 {withCredentials: true,})
                 .then((res) => {
                     return res.data.data;
                 })
-                .catch((err) => {console.log(err)});
+                .catch((err) => {return null;});
+            set_user_attributions_updated(false);
 
-            if(!result || !result.success)
-                return;
-
-            const put_user = async (user_attribution) => {
-                const user_id = user_attribution.user_id;
-
-                const user = await axios.get(`${process.env.API_PROTOCOL}://${process.env.API_URL}/users`, {
-                        params: { usurpation: user_id },
-                        withCredentials: true,
-                    })
+            if(!result){
+                result = await axios.patch(`${process.env.API_PROTOCOL}://${process.env.API_URL}/bot/check_users`, 
+                    {}, 
+                    {withCredentials: true,})
                     .then((res) => {
-                        if(res.data.success) 
-                            return res.data.data;
-                        else
-                            return null;
+                        return res.data.data;
                     })
-                    .catch((err) => {console.log(err)});
-                
-                user_attribution.user = user;
-
-                return user_attribution;
+                    .catch((err) => {console.log(err)});   
+                set_user_attributions_updated(true);
             }
-            const new_user_attributions = await Promise.all(result.data.map(put_user));
 
-            set_user_attributions(new_user_attributions);
+            if(!result || !result.success){
+                set_user_attributions({
+                    "error": true
+                });
+                return;
+            }
+
+            set_user_attributions(result.data);
         };
         
         run_bot();
@@ -110,14 +105,21 @@ function profile_page(){
                     </>;
         
         const get_user_attribution_html = () => {
-            if(!user_attributions)
+            if(!user_attributions || user_attributions.error)
                 return <p>Error</p>;
             const html_list = [];
 
+            html_list.push(<div key={-1}>
+                <p>{(user_attributions_updated) ? "The bot have updated the database" : "No Update"}</p>
+            </div>);
+
+            let i=0;
+
             user_attributions.forEach(user_attribution => {
-                html_list.push(<div key={user_attribution.user_id}>
-                                <p>{user_attribution.user?.username || user_attribution.user?.discord_id || "Unknown"} - {user_attribution.gommette}</p>
+                html_list.push(<div key={i}>
+                                <p>{user_attribution.user?.username || user_attribution.user?.discord_id || "Unknown"} - {user_attribution.gommette} {(user_attribution.gommette == "green") ? "- " + user_attribution.book?.book_name || "- Unknown" : ""}</p>
                             </div>);
+                i++;
             });
 
             return html_list;

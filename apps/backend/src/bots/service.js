@@ -37,8 +37,19 @@ async function get_last_log(bot_name){
     return last_log;
 }
 
+async function get_second_last_log(bot_name){
+    const last_logs = (await BotLog.findAll({
+            where: {bot_name: bot_name},
+            order: [['assigned_date', 'DESC']],
+            limit: 2,
+        }));
+
+    return last_logs.length >= 2 ? logs[1] : null;
+}
+
 module.exports = {
     is_last_exucution_made_x_less_than_hours_ago,
     create,
-    get_last_log
+    get_last_log,
+    get_second_last_log
 };
