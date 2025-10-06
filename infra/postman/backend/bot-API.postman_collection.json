@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "37aaa903-c6e9-4d59-83b8-98d4fbcd3cb9",
+		"name": "bot-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33455248"
+	},
+	"item": [
+		{
+			"name": "start",
+			"item": [
+				{
+					"name": "healthcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"backend healthy\", function (){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        \"success\": true,\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bot_url}}/health",
+							"host": [
+								"{{bot_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "check_user-patch",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{bot_url}}/check_users",
+					"host": [
+						"{{bot_url}}"
+					],
+					"path": [
+						"check_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check_user-get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{bot_url}}/check_users",
+					"host": [
+						"{{bot_url}}"
+					],
+					"path": [
+						"check_users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
