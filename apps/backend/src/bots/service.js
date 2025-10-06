@@ -28,7 +28,17 @@ async function create(bot_name){
     });
 }
 
+async function get_last_log(bot_name){
+    const last_log = (await BotLog.findOne({
+            where: {bot_name: bot_name},
+            order: [['assigned_date', 'DESC']]
+        }));
+
+    return last_log;
+}
+
 module.exports = {
     is_last_exucution_made_x_less_than_hours_ago,
-    create
+    create,
+    get_last_log
 };
