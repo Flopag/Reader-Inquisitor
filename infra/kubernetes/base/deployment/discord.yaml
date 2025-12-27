@@ -44,7 +44,7 @@ spec:
             secretKeyRef:
               name: express
               key: POWER_USER_PASS
-         - name: BOT_SECRET
+        - name: BOT_SECRET
           valueFrom:
             secretKeyRef:
               name: discord-bot
