@@ -6,3 +6,4 @@ patches:
   - path: deployment/backend-patch.yaml
   - path: deployment/frontend-patch.yaml
   - path: deployment/bot-patch.yaml
+  - path: deployment/discord-patch.yaml

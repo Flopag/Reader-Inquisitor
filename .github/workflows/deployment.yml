@@ -33,9 +33,18 @@ jobs:
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-discord:
+    needs: code-test
+    uses: ./.github/workflows/service_build.yml
+    with:
+      build_tag: ${{ github.sha }}
+      service: discord
+    secrets:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
     
   e2e-test:
-    needs: [build-frontend, build-backend, build-bot]
+    needs: [build-frontend, build-backend, build-bot, build-discord]
     uses: ./.github/workflows/e2e_test.yml
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
@@ -84,6 +93,18 @@ jobs:
       build_tag: ${{ github.sha }}
       namespace: prod
       service: bot
+    secrets:
+      SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
+      SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
+      SSH_SERVER_USERNAME: ${{ secrets.SSH_SERVER_USERNAME }}
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  deployment-discord:
+    needs: [update-configuration-prod]
+    uses: ./.github/workflows/service_deployment.yml
+    with:
+      build_tag: ${{ github.sha }}
+      namespace: prod
+      service: discord
     secrets:
       SSH_SERVER_HOST: ${{ secrets.SSH_SERVER_HOST }}
       SSH_SERVER_PASSWORD: ${{ secrets.SSH_SERVER_PASSWORD }}
