@@ -33,9 +33,6 @@ spec:
           timeoutSeconds: 5
           failureThreshold: 6
         env:
-
-POWER_USER_PASS=thisisaverysecurepass
-BACKEND_URL=http://backend:4000
         - name: PORT
           value: "3003"
         - name: BACKEND_URL
