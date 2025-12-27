@@ -40,11 +40,18 @@ BACKEND_URL=http://backend:4000
           value: "3003"
         - name: BACKEND_URL
           value: "<to_replace>"
+        - name: DISCORD_ID
+          value: "1404369039039660034"
         - name: POWER_USER_PASS
           valueFrom:
             secretKeyRef:
               name: express
               key: POWER_USER_PASS
+         - name: BOT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: discord-bot
+              key: BOT_SECRET
         ports:
         - containerPort: 3003
       

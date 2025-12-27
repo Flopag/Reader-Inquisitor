@@ -18,6 +18,9 @@ secretGenerator:
   - name: discord
     literals:
       - DISCORD_SECRET=donotwork
+  - name: discord-bot
+    literals:
+      - BOT_SECRET=donotwork
   - name: express
     literals:
       - EXPRESS_SESSION_SECRET=Doyourealythingthatisthesecret
