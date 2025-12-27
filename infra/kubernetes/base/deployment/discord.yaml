@@ -37,6 +37,8 @@ spec:
           value: "3003"
         - name: BACKEND_URL
           value: "<to_replace>"
+        - name: PUBLIC_KEY
+          value: "8102fda3824c36b903f0d67b3b1eee568a7f2e28a14ba566bb1f7d87c4ff3a51"
         - name: DISCORD_ID
           value: "1404369039039660034"
         - name: POWER_USER_PASS
