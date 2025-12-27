@@ -55,9 +55,11 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 });
 
 app.get('/health', async (req, res) => {
-    await sequelize.authenticate();
-
-    require('@utils/responses').success(res, `The API is healthy`, {});
+    res.status(200).json({
+        "success": true,
+        "message": "The API is healthy",
+        "error_code": null,
+    });
 });
 
 app.listen(PORT, () => {
