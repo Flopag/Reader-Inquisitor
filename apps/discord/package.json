@@ -11,8 +11,9 @@
   "engines": {
     "node": ">=18.x"
   },
+  "type": "module",
   "scripts": {
-    "start": "node --env-file=.env commands.js && node --env-file=.env src/index.js",
+    "start": "node --env-file=.env src/commands.js && node --env-file=.env src/index.js",
     "dev": "nodemon app.js"
   },
   "license": "MIT",
