@@ -50,6 +50,10 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       });
     }
     if (name === 'show_all_gommettes') {
+      res.send({
+        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+      });
+
       await session.get(`${url}/auth/power_user`, {
           params: { pass: password }
       });
@@ -60,34 +64,20 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
       if(!result?.success || !result?.data){
         console.error(`Could not get result`);
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: [
-              {
-                type: MessageComponentTypes.TEXT_DISPLAY,
-                content: `Could not get result`
-              }
-            ]
-          },
-        });
+        await axios.patch(
+          `https://discord.com/api/v10/webhooks/${process.env.DISCORD_ID}/${id}/messages/@original`,
+          { content: `Internal Error` }
+        );
+        return;
       }
 
       if(!result.data?.success || !result.data?.data){
         console.error(`Could not get result of result`);
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-            components: [
-              {
-                type: MessageComponentTypes.TEXT_DISPLAY,
-                content: `Could not get result of result`
-              }
-            ]
-          },
-        });
+        await axios.patch(
+          `https://discord.com/api/v10/webhooks/${process.env.DISCORD_ID}/${id}/messages/@original`,
+          { content: `Internal Error` }
+        );
+        return;
       }
 
       const results_array = result.data.data;
@@ -95,21 +85,15 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
       let end_string = "";
 
       results_array.forEach(result => {
-        end_string += result.user?.username + " -> " + (result.gommette == "red") ? "🔴" : "🟢" + "\n";
+        end_string += result.user?.username + " -> " + ((result.gommette == "red") ? "🔴" : "🟢" + "\n");
       });
 
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-          components: [
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: end_string
-            }
-          ]
-        },
-      });
+      await axios.patch(
+        `https://discord.com/api/v10/webhooks/${process.env.DISCORD_ID}/${id}/messages/@original`,
+        { content: end_string }
+      );
+
+      return;
     }
 
     console.error(`unknown command: ${name}`);
