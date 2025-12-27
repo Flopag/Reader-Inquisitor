@@ -10,6 +10,13 @@ import {
 } from 'discord-interactions';
 import { getRandomEmoji, DiscordRequest } from './utils.js';
 
+import axios from "axios";
+import { CookieJar } from "tough-cookie";
+import { wrapper } from "axios-cookiejar-support";
+
+const jar = new CookieJar();
+const session = wrapper(axios.create({ jar, withCredentials: true }));
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -28,9 +35,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
 
-    // "test" command
-    if (name === 'test') {
-      // Send a message into the channel where command was triggered from
+    if (name === 'bonjour') {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -38,8 +43,69 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
           components: [
             {
               type: MessageComponentTypes.TEXT_DISPLAY,
-              // Fetches a random emoji to send from a helper function
-              content: `hello world ${getRandomEmoji()}`
+              content: `BONJOUR!!`
+            }
+          ]
+        },
+      });
+    }
+    if (name === 'show_all_gommettes') {
+      await session.get(`${url}/auth/power_user`, {
+          params: { pass: password }
+      });
+
+      const result = await session.get(
+          process.env.BACKEND_URL + "/check_users"
+      ).data;
+
+      if(!result?.success || !result?.data){
+        console.error(`Could not get result`);
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            components: [
+              {
+                type: MessageComponentTypes.TEXT_DISPLAY,
+                content: `Could not get result`
+              }
+            ]
+          },
+        });
+      }
+
+      if(!result.data?.success || !result.data?.data){
+        console.error(`Could not get result of result`);
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+            components: [
+              {
+                type: MessageComponentTypes.TEXT_DISPLAY,
+                content: `Could not get result of result`
+              }
+            ]
+          },
+        });
+      }
+
+      const results_array = result.data.data;
+      
+      let end_string = "";
+
+      results_array.forEach(result => {
+        end_string += result.user?.username + " -> " + (result.gommette == "red") ? "🔴" : "🟢" + "\n";
+      });
+
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+          components: [
+            {
+              type: MessageComponentTypes.TEXT_DISPLAY,
+              content: end_string
             }
           ]
         },
