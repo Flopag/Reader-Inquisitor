@@ -58,9 +58,9 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
           params: { pass: process.env.POWER_USER_PASS }
       });
 
-      const result = await session.get(
+      const result = (await session.get(
           process.env.BACKEND_URL + "/check_users"
-      ).data;
+      )).data;
 
       if(!result?.success || !result?.data){
         console.error(`Could not get result`);
