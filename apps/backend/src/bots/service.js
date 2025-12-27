@@ -44,7 +44,7 @@ async function get_second_last_log(bot_name){
             limit: 2,
         }));
 
-    return last_logs.length >= 2 ? logs[1] : null;
+    return last_logs.length >= 2 ? last_logs[1] : null;
 }
 
 module.exports = {
