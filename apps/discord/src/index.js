@@ -54,8 +54,8 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
       });
 
-      await session.get(`${url}/auth/power_user`, {
-          params: { pass: password }
+      await session.get(process.env.BACKEND_URL + "/auth/power_user", {
+          params: { pass: process.env.POWER_USER_PASS }
       });
 
       const result = await session.get(
