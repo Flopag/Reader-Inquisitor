@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord
+  labels:
+    app: reader-inquisitor
+    service: discord
+spec:
+  selector:
+    matchLabels:
+      app: reader-inquisitor
+      service: discord
+  template:
+    metadata:
+      labels:
+        app: reader-inquisitor
+        service: discord
+    spec:
+      containers:
+      - name: discord
+        image: flopag/reader-inquisitor_discord
+        imagePullPolicy: Always
+        command: ["npm"]
+        args: ["run", "start"]
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - ./healthcheck.sh
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 6
+        env:
+
+POWER_USER_PASS=thisisaverysecurepass
+BACKEND_URL=http://backend:4000
+        - name: PORT
+          value: "3003"
+        - name: BACKEND_URL
+          value: "<to_replace>"
+        - name: POWER_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: express
+              key: POWER_USER_PASS
+        ports:
+        - containerPort: 3003
+      

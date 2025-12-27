@@ -16,6 +16,22 @@ services:
       timeout: 30s
       retries: 3
       start_period: 30s
+  discord:
+    image: reader-inquisitor/discord
+    build:
+      context: ../..
+      dockerfile: infra/docker/discord.Dockerfile
+    env_file:
+      - discord.env
+    ports:
+      - 3003:3003
+    command: npm run start
+    healthcheck:
+      test: ["CMD-SHELL", "./healthcheck.sh"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
   bot:
     image: reader-inquisitor/bot
     build:

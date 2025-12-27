@@ -3,10 +3,12 @@ resources:
   - deployment/frontend.yaml
   - deployment/database.yaml
   - deployment/bot.yaml
+  - deployment/discord.yaml
   - service/backend.yaml
   - service/frontend.yaml
   - service/database.yaml
   - service/backend-backdoor.yaml
   - service/bot.yaml
+  - service/discord.yaml
   - persistentVolumeClaim/database.yaml
   - namespace/prod.yaml
