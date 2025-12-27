@@ -1,0 +1,27 @@
+{
+  "name": "discord",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Discord API",
+  "author": "Pagano Florian",
+  "bugs": {
+    "url": "https://github.com/Flopag/Reader-Inquisitor/issues"
+  },
+  "homepage": "https://github.com/Flopag/Reader-Inquisitor#readme",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "scripts": {
+    "start": "node --env-file=.env commands.js && node --env-file=.env src/index.js",
+    "dev": "nodemon app.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "discord-interactions": "^4.0.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

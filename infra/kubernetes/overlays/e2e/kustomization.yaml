@@ -6,8 +6,10 @@ patches:
   - path: deployment/backend-patch.yaml
   - path: deployment/bot-patch.yaml
   - path: deployment/frontend-patch.yaml
+  - path: deployment/discord-patch.yaml
   - path: service/backend-patch.yaml
   - path: service/frontend-patch.yaml
+  - path: service/discord-patch.yaml
 secretGenerator:
   - name: database
     literals:
@@ -16,6 +18,9 @@ secretGenerator:
   - name: discord
     literals:
       - DISCORD_SECRET=donotwork
+  - name: discord-bot
+    literals:
+      - BOT_SECRET=donotwork
   - name: express
     literals:
       - EXPRESS_SESSION_SECRET=Doyourealythingthatisthesecret
